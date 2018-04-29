@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   		<title>Pagina Registro</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+		<div class="wrapper">
+  			<h1>{{ facultad.nombre }}</h1>
+  			<h1>{{ facultad.titulaciones[numero] }}</h1>
+  			<p>Introduzca la información necesaria para la nueva titulación. Debe introducir el numero de cursos y las asignaturas de cada uno de ellos.</p>
+  			<form class="form" method="post" enctype=multipart/form-data action="/admin/agregar_facul/titulaciones">
+  				<p><input type = "hidden" name = "numero" value = {{numero}} /></p>
+				<p><input type = "hidden" name = "facul_nombre" value = {{facultad.nombre}} /></p>
+				<p><input type="file" name="file"></p>	
+
+				{% for curso in range(1, l_cursos[numero] + 1) %}
+    			<div>
+    				<p>>Nº Asignaturas del curso {{curso}}
+    					<select name="asignaturas_{{curso}}" id="titul" style="width:120px" onchange='genList(this.value,{{curso}});'>
+  							{% for numero in vs %}
+  								<option value={{ numero }}> {{numero}} </option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+				<div id="input_list{{curso}}" ></div>
+				{% endfor %}
+				{% if ultima %}				
+    				<input type="submit" class="submit" value="Finalizar">
+    			{% else %}
+    				<input type="submit" class="submit" value="Siguiente">
+    			{% endif %}
+  			</form>
+		</div>
+	<script>
+		function genList(num,curso){
+		clean(curso);
+ 		for(var i = 0; i < num; i++){
+ 			var n = i + 1;
+ 			var c = curso;
+ 			var elem = list.appendChild(document.createElement('input'));
+ 			elem.setAttribute('type','text');
+ 			elem.setAttribute('placeholder', curso +' '+  n+ ': Asignatura');
+ 			elem.name = 'text'  + n + curso;
+ 			elem.className = 'text';
+ 			}
+		}
+
+		function clean(curso){
+			list = document.getElementById('input_list'+curso);
+ 			while(list.childNodes.length){
+ 				list.removeChild(list.childNodes[list.childNodes.length - 1]);
+ 				}
+			}
+	</script>	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

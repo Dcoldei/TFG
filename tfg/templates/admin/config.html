@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+   		<title>Perfil</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/stylePerfil.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	</head>
+	<body>
+
+		
+		{% include 'admin/header_admin.html' %}
+
+		<div class="wrapper">
+			<p id="panel"></p>
+			<p id="name" class="old"><b>Nombre Usuario >></b>{{usuario.nombre}}<button  id="usuario_nombre" class="button" > Editar </button></p>
+			<div id="new_name" class="new">
+				<p>Nuevo Nombre:<input type="text" id ="n_n" name="titulo" class="pass" placeholder={{usuario.nombre}}><button  id="s_n" class="button" > Enviar </button></p>
+			</div>
+  			
+  			<p id="password" class="old"><b>Password >> </b>{{usuario.password}}<button id="usuario_password"   class="button" > Editar </button></p>
+  			<div id="new_password" class="new">
+				<p>Nuevo password:<input type="text" id="n_p" name="titulo" class="pass" placeholder={{usuario.password}}><button id="s_p" class="button" > Enviar </button></p>
+			</div>
+  			
+		</div>
+		
+
+	<script>
+		$(document).ready(function(){
+
+			
+	    	$(".new").hide();
+	    	var name = {{usuario.nombre|tojson|safe}};
+		    
+			$("#usuario_nombre").click(function(){
+				$(".old").show();
+				$(".new").hide();
+				$("#name").hide();
+		        $("#new_name").show();
+		       
+		    });
+		    
+		    $("#usuario_password").click(function(){
+		    	$(".old").show();
+		    	$(".new").hide();
+		        $("#new_password").show();
+		        $("#password").hide();
+		    });
+		    
+		    $("#s_p").click(function(){
+				$(".new").hide();
+				$(".old").show();
+				$.getJSON('/admin/perfil/cambiar_password',					
+			        {
+			          nombre: name,
+			          nuevo_pass: $("#n_p").val(),
+			        },
+			        function(data){
+			        	
+			        	 location.reload();
+			        });
+			});
+			$("#s_n").click(function(){
+				$(".new").hide();
+				$(".old").show();
+				$.getJSON('/admin/perfil/cambiar_nombre',					
+			        {
+			          nombre: name,
+			          nuevo_nombre: $("#n_n").val(),
+			        },
+			        function(data){
+			        	if (data.repeat=="Si"){
+
+			        	 $("#panel").html(data.result);
+			        	}
+			        	else{
+			        		location.reload();
+			        	}
+			        });
+			});
+
+			
+		});
+	</script>
+	</body>
+
+</html>

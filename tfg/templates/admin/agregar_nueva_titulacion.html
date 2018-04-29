@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   		<title>Pagina Registro</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style_agregartitul.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+
+		<div class="wrapper">
+  			<h1>Agrega una nueva titulacion a la facultad {{facultad}}</h1>
+  			<p>Introduzca la información necesaria para agregar una nueva titulacion a la aplicación. Debe introducir todos los datos requeridos.</p>
+  			<form class="form" method="post" action="/admin/modificar_titulacion">
+  				<p><input type = "hidden" name = "facultad" value = {{facultad}} /></p>
+  				<p><input type = "hidden" name = "usuario" value = {{usuario._id}} /></p>
+    			<div>
+    				<input type="text" name="nombre"  class="name" placeholder="Nombre Titulacion">
+    				<input type="text" name="cursos"  class="name" placeholder="Numero de Cursos">
+				</div>
+    			<input type="submit" class="submit" value="Siguiente">
+  			</form>
+		</div>
+		
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

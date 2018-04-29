@@ -1,0 +1,249 @@
+
+
+  
+.button:hover {
+          background: #0b76a6;
+        }
+
+ .button {
+  display: inline-block;
+  height: 15px;
+  width: 75px;
+
+  padding-top: 2px;
+  padding-bottom: 4px; 
+  padding-right: 10px;
+  padding-left: 10px;
+  position: relative;
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  12px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
+.icono {
+  display: inline-block;
+  height: 30px;
+  width: 150px;
+
+  padding-top: 2px;
+  padding-bottom: 4px; 
+  padding-right: 10px;
+  padding-left: 10px;
+  position: relative;
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  12px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
+.icono_salir {
+  display: inline-block;
+  height: 25px;
+  width: 30px;
+  position: absolute;
+  left: 500px;
+  top: 0px;
+  
+ 
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  12px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
+/*
+ * Navegación
+ */
+.menu_sup{
+  float: right;
+  font:18px Oswald;
+
+}
+.list_left{
+
+  position: absolute;
+  top: 20%;
+  left: 0%;
+
+}
+.list_center{
+
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  z-index: 6;
+  background: white;
+
+}
+.list_right{
+
+  position: absolute;
+  top: 20%;
+  left: 55%;
+  z-index: 6;
+  background: white;
+
+}
+ul.list{
+  list-style-position: inside;
+  padding: 5px;
+  
+}
+ul li.list{
+  
+  padding: 10px;
+}
+.links{
+  text-decoration: none;
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  color:    #000080;
+
+}
+.links:hover{
+
+  text-decoration:underline;
+  color: #FF6347;
+}
+.menu_usuario{
+  
+  font:20px Oswald;
+  text-align: center;
+  
+  
+  
+  border-bottom-style: solid;
+
+
+  border-bottom-color: #00FF00;
+ 
+
+
+}
+.menu_usuario a{
+  
+  color : #696969;
+  
+
+
+}
+
+
+.enlace:hover{
+  
+  color : red;
+  
+}
+
+
+/*NOTAS ADHESIVAS*/
+
+h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+
+.wrapper{
+
+    /*background: #FFFFFF;*/
+    position: absolute;
+    
+    /*nos posicionamos en el centro del navegador*/
+
+    top:30%;
+
+    left:0%;
+
+
+    /*determinamos una anchura*/
+
+    width:60%;
+    height: 70%;
+
+    /*indicamos que el margen izquierdo, es la mitad de la anchura*/
+    margin-left: 80px;
+    
+
+    /*determinamos una altura*/
+
+
+    /*indicamos que el margen superior, es la mitad de la altura*/
+    border-right-color: black;
+    border-right-style: solid;
+    border-width: 3px;
+    
+
+    
+}
+.ranking{
+
+    position: absolute;
+    top:35%;
+    left:75%;
+    width:300px;
+    height: 168px;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px;
+}
+
+
+
+.footer {
+  
+   position: absolute;
+   left: 0%;
+  top: 100%;
+   width: 100%;
+   background-color:#282828;
+   color: white;
+   
+    height:100px;
+}
+
+
+h1{
+  text-align:$align;
+  padding:0px 0px 0px 0px;
+  font:25px Oswald;
+  
+  color:    #000000;
+  text-transform:uppercase;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-bottom: : 30px;
+}
+
+p{
+  font:13px Open Sans;
+  color:    #000000;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-top: :30px;
+ 
+  margin-bottom:  30px;
+}
+

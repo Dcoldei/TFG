@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Anotaciones</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
+	<link  href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular" rel="stylesheet" type="text/css"> 
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAnotaciones.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+	</head>
+	<body>
+
+		{% include 'user/header.html' %}
+		{% include 'user/menu_user.html' %}
+ 		
+	
+ 		<div class="menu_notas">		
+    		<a href={{url_for('user.crear_nota', nombre = usuario.nombre) }}   class="button" >Crear Nota </a>
+
+    		<p>Filtros:</p>   		
+    		<ul class="filtro"  >
+    			{% if  filtro == "Examen"  %}
+					<li class="filtro" ><a class="filtro_activo" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Examen") }}>Exámenes</a></li>
+				{% else %}
+					<li class="filtro" ><a class="filtro" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Examen") }}>Exámenes</a></li>
+				{% endif %}
+				{% if  filtro == "Práctica"  %}
+					<li class="filtro"  ><a class="filtro_activo" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Práctica") }}>Prácticas</a></li>
+				{% else %}
+					<li class="filtro"  ><a class="filtro" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Práctica") }}>Prácticas</a></li>
+				{% endif %}
+				{% if  filtro == "Entrega"  %}
+					<li class="filtro" ><a class="filtro_activo" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Entrega") }} >Entregas</a></li>
+				{% else %}
+					<li class="filtro" ><a class="filtro" href= {{url_for('user.usuario_anotaciones_filtro', nombre=usuario.nombre, filtro = "Entrega") }} >Entregas</a></li>
+				{% endif %}				
+				{% if  busqueda  %}
+					<li class="filtro" ><a class="filtro" href= {{url_for('user.usuario_anotaciones', nombre=usuario.nombre) }} >Sin filtrar</a></li>
+				{% else %}
+					<li class="filtro" ><a class="filtro_activo" href= {{url_for('user.usuario_anotaciones', nombre=usuario.nombre) }} >Sin filtrar</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		<div class="wrapper">
+  			<h1>Anotaciones</h1>
+  			<p>Crea notas con las tareas que tengas que realizar durante el curso.</p>
+  			<ul class="nota">
+  			<div class="mural">
+  				{% if  busqueda  %}
+  				{% for nota in notas %}
+  				{% if  filtro == nota.asunto  %}	
+  					<li class="nota" >
+      					<a class="nota" href={{url_for('user.ver_nota', nombre = usuario.nombre, nota = nota._id) }}>
+        					<h2>{{nota.asunto}} #{{nota.fecha}}</h2>
+        					<p>{{nota.titulo}} </p>
+      					</a>
+    				</li>
+    			{% endif %}
+				{% endfor %}
+
+				{% else %}
+    				{% for nota in notas %}
+  					<li class="nota" >
+      					<a class="nota" href={{url_for('user.ver_nota', nombre = usuario.nombre, nota = nota._id) }}>
+        					<h2>{{nota.asunto}} #{{nota.fecha}}</h2>
+        					<p>{{nota.titulo}} </p>
+      					</a>
+    				</li>
+					{% endfor %}
+				{% endif %}
+	
+			
+			</div>
+			</ul>
+			{% include 'user/footer.html' %}
+			</div>
+
+	</body>
+
+</html>

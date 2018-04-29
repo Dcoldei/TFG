@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Inicio</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleInicio.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	</head>
+	<body>
+
+		{% include 'user/header.html' %}
+
+ 		{% include 'user/menu_user.html' %}
+
+		<div class="wrapper">
+  			<h1>Asignaturas</h1>
+  			<p>Busca asignaturas por curso o por el nombre.</p>
+    		<div>
+    			<form class="form" method="post" action="/usuario/inicio/busqueda/curso">
+    				<p><input type = "hidden" name = "titulacion" value = "{{usuario.titulacion}}" /></p>
+					<p  ><input id="user_name" type = "hidden" name = "nombre" value = "{{usuario.nombre}}" /></p>
+					
+    				<p>>Elige curso: 
+    					<select name="cursos"  id="cursos" style="width:120px">
+  							{% for curso in cursos %}
+  								<option value="{{ curso._id }}">{{ curso.numero }}</option>
+							{% endfor %}					
+						</select>
+					</p>
+				</form>
+			</div>
+		</div>
+		<div class="searcher">
+    		<div>
+    			<form class="form" method="post" action="/usuario/inicio/busqueda/nombre">
+    				<p><input type = "hidden" name = "titulacion" value = "{{usuario.titulacion}}" /></p>
+					<p><input type = "hidden" name = "nombre" value = "{{usuario.nombre}}" /></p>
+					<p><input type = "hidden" name = "cursTit" value = "{{cursos}}" /></p>
+    				<p><input  type="text" size="30" name="busqueda" id="busqueda_nombre"></p>
+				</form>
+			</div>
+		</div>
+		<div class="ult_arch">
+			<h1 style="font-size: 20px; margin-left: 120px;">Últimas subidas</h1>
+			{% for b in resultados %}
+				<div class="correo"><a class="link_correo" href= {{url_for('user.ver_archivo',  archivo=b.nombre , usuario = usuario.nombre)}}><span style="max-width: 10px; color: red;">{{b.nombre}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{b.asignatura}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{b.fecha}}</a></div>
+			{% endfor %}	
+		</div>
+		<div class="env_busqueda">
+			<div class="resul_busqueda">
+			<div class = "busqueda"></div>
+			</div>		
+    	</div>
+    	{% include 'user/footer.html' %}	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+			var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			
+			$("#cursos").change(function(){
+            	$.getJSON('/usuario/inicio/curso/_search',{
+						busqueda: $('#cursos').val() , name: $('#user_name').val(),
+					},function(data){
+        
+            $(".busqueda").html(data.result);
+            
+        
+    			});
+            
+			});
+			$("#busqueda_nombre").keyup(function(){
+            	$.getJSON('/usuario/inicio/nombre/_search',{
+						busqueda: $('#busqueda_nombre').val() , name: $('#user_name').val(),
+					},function(data){
+        
+            $(".busqueda").html(data.result);
+            
+        
+    			});
+            
+			});
+	    	
+		    
+			
+		});
+	</script>
+	</body>
+
+</html>

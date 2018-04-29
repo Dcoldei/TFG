@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>UCM CommunityAdmin</title>
+	  
+		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+		<div class="wrapper">
+  			<h1>Bienvenid@</h1>
+  			<p>Hola a tod@s y bienvenidos a UCM Community Admin</p>
+  			<a href={{url_for('admin.agregar_facult', nombre=usuario._id) }} class="button" > Agregar Facultad</a>
+  			<a href={{url_for('admin.admin_modificar', nombre=usuario._id) }}  class="button" >Modificar Facultad</a>
+  			<a href={{url_for('admin.admin_pendientes', nombre=usuario._id) }}  class="button" >Buzón de pendientes
+  				{% if pendientes>0 %}
+  					<div class="num">{{pendientes}}</div>
+  				{% endif %}
+  			</a>
+  			<a href={{url_for('admin.admin_denuncias', nombre=usuario._id) }}  class="button" > Buzón de denuncias
+  				{% if denuncias>0 %}
+  					<div class="num">{{denuncias}}</div>
+  				{% endif %}
+  			</a>
+  			<a href={{url_for('admin.admin_archivos', nombre=usuario._id) }}  class="button" >Archivos</a>
+  			<a href={{url_for('admin.admin_usuarios', nombre=usuario._id) }}  class="button" >Usuarios</a>
+
+		</div>
+	</body>
+
+</html>

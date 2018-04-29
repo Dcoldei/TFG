@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   		<title>Pagina Registro</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+
+		<div class="wrapper">
+			<p>Ha introducido en la base los siguientes datos </p>
+  			<h1>Nombre facultad:   {{ facultad.nombre }}</h1>
+  			<p>Con las siguientes titulaciones > </p>
+  			{% for t in range(facultad.num_titul) %}
+  				<h1>Titulacion >>  {{ facultad.titulaciones[t] }}</h1>
+  				{% for c in range(1,cursos[t]+1) %}
+  					<h1>Curso {{c}}:  
+  					{% if facultad.num_titul>1%}	
+  						{% for a in asign_titul[t][c-1] %}
+  							<p>{{a}} </p>
+  						{% endfor %}
+  					{% else %}
+  						{% for a in asign_titul[t][c-1] %}
+  							<p>{{a}} </p>
+  						{% endfor %}
+  					{% endif %}
+  					</h1>
+  				{% endfor %}
+  			{% endfor %}
+  			<a href={{url_for('admin.admin_inicio', nombre=usuario.nombre) }}   class="button" > Volver Inicio</a>
+		</div>
+	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

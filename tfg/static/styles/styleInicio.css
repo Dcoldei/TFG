@@ -1,0 +1,182 @@
+
+
+
+.button:hover {
+          background: #0b76a6;
+        }
+
+ .button {
+  display: inline-block;
+  height: 35px;
+  width: 300px;
+
+  padding-top: 4px;
+  padding-bottom: 4px; 
+  padding-right: 10px;
+  padding-left: 10px;
+  position: relative;
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  15px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  
+  
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+  }
+.ult_arch{
+
+  position: absolute;
+  left: 68%;
+  top: 25%;
+  border-left-style: solid;
+  border-left-color: black;
+  border-left-width: 2px;
+  height: 220px;
+  width: 440px;
+   
+
+}
+.link_correo{
+
+  margin-left: 20px;  
+  font: 15px Oswald; 
+  color: #006400; 
+  text-decoration:none;
+
+}
+.correo{
+
+
+  padding-top: 15px; 
+  padding-bottom: 15px; 
+  background-color:#FFFAFA;
+}
+.correo:hover{
+   background-color: #F5F5F5;
+
+} 
+
+.wrapper{
+
+    position: absolute;
+    color: #FFFFFF;
+    top:48%;
+    left:25%;
+    width:450px;
+    margin-left:-200px;
+    height:450px;
+    margin-top:-150px;
+}
+
+.searcher{
+
+    position: absolute;
+    color: #FFFFFF;
+    top:60%;
+    left:40%;
+    width:350px;
+    height:450px;
+    margin-top:-150px;
+}
+.footer {
+  margin-top:150px;
+   position: absolute;
+   left: 0%;
+  top: 140%;
+   width: 100%;
+   background-color:#282828;
+   color: white;
+   
+    height:100px;
+}
+.env_busqueda{
+
+  position: absolute;  
+  top:60%;
+  background: #F5F5F5;
+  width: 99%;
+  height: 100%;
+  border-top-style: solid;
+  border-top-color: black;
+  border-top-width: 2px;
+
+
+}
+.resul_busqueda{
+  margin: 100px;
+  width: 80%;
+  height: 80%;
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  background: white;
+  border-style: solid;
+  border-color: #708090;
+  
+  
+  
+  
+}
+.busqueda{
+
+    position: absolute;
+    color: #FFFFFF;
+    background: white;
+    z-index: 9;    
+    margin-top: 60px;
+    width:70%;
+    margin-left:6%;
+    height:450px;
+    
+}
+
+
+
+h1{
+  text-align:$align;
+  padding:0px 0px 0px 0px;
+  font:25px Oswald;
+  
+  color:    #000000;
+  text-transform:uppercase;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-bottom: : 30px;
+}
+
+p{
+  font:13px Open Sans;
+  color:    #000000;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-top: :30px;
+ 
+  margin-bottom:  30px;
+}
+
+.form{
+  width:$full;
+}
+
+input[type="text"],input[type="password"]{
+  width:50%;
+  padding:8px 0px 8px 8px;
+  border-radius:5px;
+  
+  @include disable;
+  border:1px solid rgba(0,0,0,1);
+  
+  
+  text-shadow:#000 0px 1px 5px;
+}
+
+
+input[type="submit"]:hover{
+  opacity:1;
+  cursor:pointer;
+}
+

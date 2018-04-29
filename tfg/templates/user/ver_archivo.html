@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Archivo</title>
+	  
+		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Amiko' rel='stylesheet' type='text/css'>
+		
+		<script   
+		    src="https://code.jquery.com/jquery-3.2.1.min.js"   
+		    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   
+		    crossorigin="anonymous">
+		</script>  
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleArchivo.css') }}">
+		<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	<script type=text/javascript src="{{ url_for('static',filename='jquery-ias.min.js') }}"></script> 
+	</head>
+	<body>
+
+		
+
+		{% include 'user/header.html' %}	
+
+		<div class="wrapper">
+
+			<div class="panel" id="panel_1" ">  
+        		<div class="env_panel">
+
+          			<div class="titulo1">{{archivo.tipo}}</div>
+          			<div class="titulo1">{{archivo.nombre}}</div>
+          			<div class="titulo2">{{archivo.fecha}}</div>
+          			
+					<div class="titulo1" style="position: absolute; top: 5%; left: 75%;" >Autor</div>
+					<div class="titulo1" style="position: absolute; top: 12%; left: 75%;" >{{archivo.autor}}</div>
+					<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=autor.nombre)}}    title={{autor.nombre}}><img class="avatar" style="position: absolute; top: 0%; left: 85%;" tittle=autor.nombre src="{{url_for('static', filename='')}}{{autor.foto}}" /></a>
+          			<div class="circle_env">
+            			<div class="circle">
+              				<div class="number">{{archivo.valoracion}}/5</div>
+              				<div class="quaterly">Valoracion</div>
+            			</div>
+          			</div>
+          			<div id="line"></div>
+          			<div class="grafic_env"></div>
+          			<div class="grafic">	
+          				<div class="titulo1" style="margin: 20px;"><b>Num.Descargas >> </b>{{archivo.num_descargas}}</div>	
+						<div class="titulo1" style="margin: 20px;"><b>Fecha de Creación >> </b>{{archivo.fecha}}</div>
+          			</div>
+          			<a  style="position: absolute; top: 75%; left: 80%;" href={{url_for('user.uploaded_file', filename=archivo.nombre, usuario=usuario.nombre)}}   class="button"  ><i class="fa fa-download" aria-hidden="true"></i>&nbsp;&nbsp;Descargar </a>
+        		</div>
+      		</div>
+    		<div class="ec-stars-wrapper" style="text-align: center; position: absolute; top: 60%; left: 45%;
+    		">
+  				<h1>Valora el recurso </h1>
+				<a href={{url_for('user.puntuar_archivo', voto=1, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 1 estrellas">&#9733;</a>
+				<a href={{url_for('user.puntuar_archivo', voto=2, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 2 estrellas">&#9733;</a>
+				<a href={{url_for('user.puntuar_archivo', voto=3, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 3 estrellas">&#9733;</a>
+				<a href={{url_for('user.puntuar_archivo', voto=4, archivo=archivo.nombre , usuario = usuario.nombre)}} title="Votar con 4 estrellas">&#9733;</a>
+				<a href={{url_for('user.puntuar_archivo', voto=5, archivo=archivo.nombre , usuario = usuario.nombre)}} title="Votar con 5 estrellas">&#9733;</a>
+			</div>
+			<a href={{url_for('user.ver_asignatura', asignatura=archivo.id_asignatura , usuario = usuario.nombre , pagina = pagina )}}   class="back" ><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+			
+		</div>
+		
+		
+		<div class="comments" >
+				<div class="pagination">
+			<a href={{url_for('user.ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>1</a>
+			<a href={{url_for('user.ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>2</a>
+			<a href={{url_for('user.ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>3</a>
+			{% if  pagina < paginas  %}	
+  				<a href={{url_for('user.ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}} class="next">next</a>
+  			{% endif %}
+  			
+		</div>
+				<div class="new">
+  					<a class = "icono_salir"  ><i class="fa fa-window-close-o fa-2x" aria-hidden="true"></i></a>
+  					<form class="form" method="post" id = "notaform" action="/usuario/finalizar_comentario">
+	    				<p><input type = "hidden" name = "nombre" value = "{{usuario.nombre}}" /></p>
+	    				<p><input type = "hidden" name = "archivo" value = "{{archivo.nombre}}" /></p>
+	    				<p>Título</p>
+	    				<p><input type="text" name="titulo" class="pass" placeholder="Titulo"></p>
+	    				<p>Comentario</p>
+	    				<textarea rows="20" cols="80" name="body"  class="body" form="notaform">< Comentario ></textarea>
+	    				<br>
+	    				<input type="submit" class="submit" value="Crear Comentario">
+  					</form>
+
+  				</div>	
+				<a class="comment" ><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;Añadir Comentario</a>
+  				<h2>Comentarios</h2>
+  				
+  				{% for comentario in comentarios %}
+  					<div class="comentario">
+  						<div class="titulo_comentario">
+  							<div style="float: left; margin-right: 5px;"><img class="avatar" src="{{url_for('static', filename='')}}{{comentario.autor_avatar}}" /></div>
+	  						<div><b>Título: </b>{{comentario.titulo}}</div>	
+	  						<div><b>Fecha: </b>{{comentario.fecha}}</div>					
+  						</div>
+  						<div class="cuerpo_comentario">
+  							<p style=" padding-left: 15px">{{comentario.body}}</p>
+  						</div>
+  						<div style="float: left; padding-top: 15px" ><b style=" padding-left: 15px">Autor: </b>{{comentario.autor}}</div>
+  						<a href={{url_for('user.value_comment', valor=1, comentario=comentario._id, archivo=archivo.nombre, usuario= usuario.nombre )}}   class="like" title="Denunciar"><i class="fa fa-ban fa-lg" aria-hidden="true"></i></a>
+  						<a href={{url_for('user.value_comment', valor=0, comentario=comentario._id, archivo=archivo.nombre, usuario= usuario.nombre )}}   class="unlike" title="Votar Negativo"><i class="fa fa-thumbs-o-down fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{comentario.unlike}}</a>
+  						<a href={{url_for('user.value_comment', valor=1, comentario=comentario._id, archivo=archivo.nombre, usuario= usuario.nombre )}}   class="like" title="Votar Positivo"><i class="fa fa-thumbs-o-up fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{comentario.likes}}</a>
+
+  					</div>
+				{% endfor %}	
+  		
+  		{% include 'user/footer.html' %}	
+  		</div>	
+  			
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	<script type="text/javascript">
+	$(document).ready(function(){
+		
+
+  		var ias = $.ias({
+    	container:  '.comments',
+    	item:       '.comentario',
+    	pagination: '.pagination',
+    	next:       '.pagination a.next'
+  		});
+ 
+
+  		ias.extension(new IASSpinnerExtension());
+  		ias.extension(new IASTriggerExtension({offset: 3}));
+  		ias.extension(new IASNoneLeftExtension({text: "No existen más comentarios"}));
+
+
+		
+		    $(".new").hide();
+		    
+		    $(".comment").click(function(){
+		        $(".new").show();
+		        $(".comment").hide();
+		    });
+		    $(".icono_salir").click(function(){
+		        $(".new").hide();
+		        $(".comment").show();
+		    });
+		});
+
+	</script>
+	
+	</body>
+
+</html>

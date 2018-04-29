@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Agregar Curso</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style_agregartitul.css') }}">
+
+	</head>
+	<body>
+
+		
+		{% include 'admin/header_admin.html' %}
+
+		<div class="wrapper">
+  			<h1>Añadir Curso</h1>
+  			<p>Introduzca la información necesaria para agregar un nuevo curso a la titulación seleccionada.</p>
+  			<form class="form" method="post" action="/admin/agregar_curso/fin">
+  				<p><input type = "hidden" name = "titulacion_id" value = "{{titulacion._id}}" /></p>
+  				<p><input type = "hidden" name = "usuario" value = "{{usuario._id}}" /></p>
+    			<input type="text" name="numero"  class="name" placeholder="Numero o Nombre">
+    			<div>
+    				<p>>Nº de Asignaturas
+    					<select name="n_asignaturas"  id="titul" style="width:120px" onchange='genList(this.value);'>
+  							{% for n in range(1, numero +1 ) %}
+  								<option value={{ n }}> {{n}} </option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+				<div id='input_list'></div>
+    			<input type="submit" class="submit" value="Finalizar">
+  			</form>
+		</div>
+	<script>
+		function genList(num){
+		clean();
+		
+ 		for(var i = 1; i <= num; i++){
+ 			
+ 			
+ 			var elem = list.appendChild(document.createElement('input'));
+ 			
+ 				
+ 				elem.setAttribute('type','text');
+ 				elem.setAttribute('placeholder', i + ': Asignatura');
+ 				elem.name = 'asignatura_' + i ;
+ 				elem.className = 'text';
+ 			
+ 			}
+		}
+
+		function clean(){
+			list = document.getElementById('input_list');
+ 			while(list.childNodes.length){
+ 				list.removeChild(list.childNodes[list.childNodes.length - 1]);
+ 				}
+			}
+	</script>	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

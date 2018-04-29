@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   		<title>Archivo</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Amiko' rel='stylesheet' type='text/css'>
+	
+	<script   
+    src="https://code.jquery.com/jquery-3.2.1.min.js"   
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   
+    crossorigin="anonymous"></script>  
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleArchivo.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	<script type=text/javascript src="{{ url_for('static',filename='jquery-ias.min.js') }}"></script> 
+	</head>
+	<body>
+
+		<header id="main-header">
+		
+		<a id="logo-header" href="/">
+			<span class="site-name">UCM Community</span>
+			<span class="site-desc">Compañeros / Recursos  / Información </span>
+		</a> <!-- / #logo-header -->
+ 
+		<nav>
+			<ul>
+				<li><a href={{url_for('usuario_volver_inicio', nombre=usuario.nombre) }}>Inicio</a></li>
+				<li><a href="/logout">Cerrar Sesión</a></li>
+				<li><a href= {{url_for('perfil', nombre=usuario.nombre) }} >Perfil</a></li>
+			</ul>
+		</nav><!-- / nav -->
+ 
+		</header><!-- / #main-header -->
+
+
+
+		<div class="wrapper">
+			<a href={{url_for('ver_asignatura', asignatura=archivo.id_asignatura , usuario = usuario.nombre , pagina = pagina )}}   class="back" ><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+			<p class="archivo" ><b>Usuario >> </b>{{usuario.nombre}}</p>
+			<p class="archivo" ><b>Subido por >> </b>{{archivo.autor}}</p>
+			<p class="archivo" ><b>Fecha de Creación >> </b>{{archivo.fecha}}</p>
+  			<p class="archivo" ><b>Nombre >> </b>{{archivo.nombre}}.</p>
+  			<p class="archivo" ><b>Valoracion >> </b>{{archivo.valoracion}}</p>
+  			<p class="archivo" ><b>Num.Descargas >> </b>{{archivo.num_descargas}}.</p>
+  			
+  			<div class="ec-stars-wrapper">
+  				<h1>Valora el recurso </h1>
+				<a href={{url_for('puntuar_archivo', voto=1, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 1 estrellas">&#9733;</a>
+				<a href={{url_for('puntuar_archivo', voto=2, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 2 estrellas">&#9733;</a>
+				<a href={{url_for('puntuar_archivo', voto=3, archivo=archivo.nombre , usuario = usuario.nombre)}}  title="Votar con 3 estrellas">&#9733;</a>
+				<a href={{url_for('puntuar_archivo', voto=4, archivo=archivo.nombre , usuario = usuario.nombre)}} title="Votar con 4 estrellas">&#9733;</a>
+				<a href={{url_for('puntuar_archivo', voto=5, archivo=archivo.nombre , usuario = usuario.nombre)}} title="Votar con 5 estrellas">&#9733;</a>
+			</div>
+			<hr>
+  			<a href={{url_for('uploaded_file', filename=archivo.nombre, usuario=usuario.nombre )}}   class="button" ><i class="fa fa-download" aria-hidden="true"></i>
+&nbsp;&nbsp;Descargar </a>
+
+
+		</div>
+		<div class="pagination">
+			<a href={{url_for('ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>1</a>
+			<a href={{url_for('ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>2</a>
+			<a href={{url_for('ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}}>3</a>
+			{% if  pagina < paginas  %}	
+  				<a href={{url_for('ver_archivo2', archivo=archivo.nombre, usuario= usuario.nombre , pagina = pagina)}} class="next">next</a>
+  			{% endif %}
+  			
+		</div>
+		<div class="comments" >
+				<a href={{url_for('comment_file', archivo=archivo.nombre, usuario= usuario.nombre )}}   class="comment" ><i class="fa fa-pencil" aria-hidden="true"></i>
+&nbsp;&nbsp;Añadir Comentario </a>
+  					<h2>Comentarios</h2>
+  					
+  				{% for comentario in comentarios %}
+  					<div class="comentario">
+  						<div class="titulo_comentario">
+  							<p><b>Título: </b>{{comentario.titulo}}&nbsp;&nbsp;&nbsp;&nbsp;<b>Fecha: </b>{{comentario.fecha}}&nbsp;&nbsp;&nbsp;&nbsp;
+  							</p>
+  						</div>
+  						<div class="cuerpo_comentario">
+  							<p>{{comentario.body}}</p>
+  						</div>
+  						<b>Autor: </b>{{comentario.autor}}
+  						<a href={{url_for('value_comment', valor=0, comentario=comentario._id, archivo=archivo.nombre, usuario= usuario.nombre )}}   class="unlike" title="Votar Negativo"><i class="fa fa-thumbs-o-down fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{comentario.unlike}}</a>
+  						<a href={{url_for('value_comment', valor=1, comentario=comentario._id, archivo=archivo.nombre, usuario= usuario.nombre )}}   class="like" title="Votar Positivo"><i class="fa fa-thumbs-o-up fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{comentario.likes}}</a>
+  						
+  					</div>
+				{% endfor %}	
+  		
+  		{% include 'footer.html' %}	
+  		</div>	
+  			
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	<script type="text/javascript">
+	$(document).ready(function(){
+  		var ias = $.ias({
+    	container:  '.comments',
+    	item:       '.comentario',
+    	pagination: '.pagination',
+    	next:       '.pagination a.next'
+  		});
+  		jQuery.ias().reinitialize();
+  		ias.extension(new IASSpinnerExtension());
+  		ias.extension(new IASTriggerExtension({offset: 3}));
+  		ias.extension(new IASNoneLeftExtension({text: "You reached the end"}));
+  		
+	});
+	</script>
+	
+	</body>
+
+</html>
