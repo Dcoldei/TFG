@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Pagina Registro</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+		<div class="wrapper">
+			<h1>Activar archivos pendientes</h1>
+			{% for pendiente in pendientes %}
+				<p>{{pendiente.nombre}}</p>
+				<a href={{url_for('admin.uploaded_file_admin', filename=pendiente.nombre  )}}   class="button" >Descargar  </a>
+			{% endfor %}
+  			<form class="form" method="post" action="/admin/autorizar">
+  				<p><input type = "hidden" name = "nombre" value = "{{usuario._id}}" /></p>
+		    	<div>
+		    		<p>>Elige el archivo que quieres autorizar
+		    			<select name="revisar"  id="revisar" style="width:120px">
+		  					{% for archivo in archivos %}
+		  						<option value="{{ archivo.nombre }}">{{ archivo.nombre }}</option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+		    	<input type="submit" class="submit" value="Autorizar">
+		  	</form>	
+
+		</div>	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

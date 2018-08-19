@@ -1,0 +1,61 @@
+.menu{
+
+    background: #FFFFFF; 
+    position: absolute;
+    color: #FFFFFF;
+    top:240px;
+    width:100%;
+    height:100px;
+    z-index: 6;
+    margin-top:-150px;
+    
+}
+.menu_usuario{
+  
+  font:20px Oswald;
+  text-align: center;
+  
+  
+  border-bottom-style: solid;
+  border-left-style: solid;
+
+
+  border-bottom-color: #00FF00;
+ 
+
+
+}
+.menu_usuario a{
+  
+  color : #696969;
+  
+
+
+}
+.enlace:hover{
+  
+  color : red;
+  
+}
+ul.usuario li 
+{
+  
+   width:16%;
+}
+   ul.usuario {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    padding-right: 20px;
+  }
+  
+     ul.usuario li {
+      display: inline-block;
+      line-height: 80px;
+    }
+      
+       ul.usuario li a {
+        display: block;
+        padding: 0 10px;
+        text-decoration: none;
+      }

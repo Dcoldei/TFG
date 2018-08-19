@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Perfil</title>
+	  
+		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>		
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/stylePerfil.css') }}">
+		<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	</head>
+	<body>
+
+		{% include 'user/header.html' %}
+ 		
+ 		
+		<div class="wrapper">
+			
+			<div class="menu_usuario">
+				<ul class="usuario">
+					<li><a class="enlace" id="no_leidos">No Leídos</a></li>
+					<li><a class="enlace" id="leidos">Leídos</a></li>
+					<li><a class="enlace" id="enviados">Enviados</a></li>
+				</ul>
+			</div> 		
+			<div id="panel" >
+				<div class="write_perfil">
+				<h1 style="padding: 15px 20px 10px 0px;">Escribir Mensaje</h1>	
+					<p><input type = "hidden" id="mensaje_id" name = "usuario" value = "{{mensaje._id}}" /></p>
+					<a class = "icono_salir" class="button" ><i class="fa fa-window-close-o fa-2x" aria-hidden="true"></i></a>
+	   				<p style="font-size: 10px;">Asunto: <input type="text" id="asunto" class="pass" ></p>
+	    			<textarea rows="5" cols="100" id="body" class="body" form="notaform">< Comentario ></textarea>
+	   				<br>
+	    			<button id="submit" class="button">Enviar</button>
+  						
+			</div>
+				
+				{% if  enlace != "#enviados"  %}
+					<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=mensaje.autor)}}     title={{mensaje.autor}} ><img class="avatar_mensaje" src="{{url_for('static', filename='')}}{{mensaje.autor_avatar}}" /></a>
+					
+					<div class="mensaje_autor">{{mensaje.autor}}<br>{{mensaje.fecha}}</div>	
+  					<button  style=" top: 70%; left:30%;" id="enviar" class="button" > Enviar Mensaje</button>
+  					<button  style=" top: 70%; left:50%;" id="denunciar" class="button" > Denunciar Mensaje</button>
+  				{%  else %}
+  				<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=destino.nombre)}}     title={{destino.nombre}}><img class="avatar_mensaje" src="{{url_for('static', filename='')}}{{destino.foto}}" /></a>
+  					
+  					<div class="mensaje_autor">{{destino.nombre}}<br>{{mensaje.fecha}}</div>	
+  				{% endif %}
+				<div class="mensaje_body">{{mensaje.asunto}}<br><br>{{mensaje.body}}</div>
+			</div>
+    		<a id="buzon" href={{url_for('user.perfil', nombre=usuario.nombre) }}    class="buzon" ><i id="envelope" class="fa fa-envelope-open fa-4x"></i></a></p>
+		</div>
+		
+		{% include 'user/footer.html' %}	
+	<script>
+		$(document).ready(function(){
+	    
+			var name = {{usuario.nombre|tojson|safe}};
+			var enlace = {{enlace|tojson|safe}};
+			var destino = {{mensaje.autor|tojson|safe}};
+
+			$(enlace).css("color", "#FF6347");
+
+
+			$(".write_perfil").hide();
+
+	    	$("#submit").click(function(){
+		    	
+		    	$.getJSON('/usuario/perfil/finalizar_mensaje',{
+						destino: destino,
+						autor: name,
+						body : $("#body").val(),
+						asunto : $("#asunto").val(),
+					},function(data){    
+        				$(".write_perfil").hide();
+		    			alert($("#body").val());
+		    			alert($("#asunto").val());
+    			});
+		    });
+		    $("#enviar").click(function(){
+		    	$(".write_perfil").show();
+			});
+			$(".icono_salir").click(function(){
+		    	$(".write_perfil").hide();
+			});
+
+		    $("#buzon").hover(function(){
+			    $("#envelope").removeClass("fa fa-envelope-open fa-4x").addClass("fa fa-envelope fa-4x");
+			},
+			function(){
+			   	 $("#envelope").removeClass("fa fa-envelope fa-4x").addClass("fa fa-envelope-open fa-4x");
+			});
+
+			$("#leidos").click(function(){
+				$(".enlace").css("color", "#696969");
+				$("#leidos").css("color", "#FF6347");
+		    	$.getJSON('/usuario/perfil/mensajes/obtener',{
+						busqueda: $("#leidos").text(),
+						nombre: name,
+					},function(data){
+        	
+
+            $("#panel").html(data.result);
+            
+        
+    			});
+		    });
+
+		    $("#no_leidos").click(function(){
+		    	$(".enlace").css("color", "#696969");
+		    	$("#no_leidos").css("color", "#FF6347");
+		    	$.getJSON('/usuario/perfil/mensajes/obtener',{
+						busqueda: $("#no_leidos").text(),
+						nombre: name,
+					},function(data){
+        
+            $("#panel").html(data.result);
+            
+        
+    			});
+		    });
+
+		    $("#enviados").click(function(){
+		    	$(".enlace").css("color", "#696969");
+		    	$("#enviados").css("color", "#FF6347");
+		    	$.getJSON('/usuario/perfil/mensajes/obtener',{
+						busqueda: $("#enviados").text(),
+						nombre: name,
+					},function(data){
+        
+            $("#panel").html(data.result);
+            
+        
+    			});
+		    });
+		    $("#denunciar").click(function(){
+		    	$.getJSON('/usuario/perfil/mensajes/denuncias',{
+						busqueda: $("#mensaje_id").val(),
+						nombre: name,
+					},function(data){
+            			alert("Denuncia registrada")
+    			});
+		    });
+		});
+	</script>
+	</body>
+
+</html>

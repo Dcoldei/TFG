@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Ver Usuario</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/stylePerfil.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	</head>
+	<body>
+
+		
+		{% include 'user/header.html' %}
+
+		<div class="correo_titulo">Escribir Mensaje</div>
+		<a id="buzones"   title="Escribir Mensaje"  class="message" ><i style="cursor:pointer; " id="envelope" class="fa fa-envelope fa-4x"></i></a>
+		<div class="wrapper">
+			<img class="avatar_comp" src="{{url_for('static', filename='')}}{{compa.foto}}" /> 
+
+			<div class="write">
+				<h1 style="padding: 15px 20px 20px 30px;">Escribir Mensaje</h1>	
+				<form class="form_mensaje" method="post" id = "notaform" action="/usuario/comunidad/escribir_mensaje">	    <p><input type = "hidden" name = "autor" value = "{{usuario.nombre}}" /></p>
+    				<p><input type = "hidden" name = "usuario" value = "{{compa.nombre}}" /></p>
+	   				<p style="font-size: 15px;">Asunto: <input type="text" name="asunto" class="pass" ></p>
+	    			<textarea rows="10" cols="100" name="body"  class="body" form="notaform">< Comentario ></textarea>
+	   				<br>
+	    			<input type="submit" class="submit" value="Enviar">
+  				</form>			
+			</div>
+			<div class="profile">
+				<p><b>Nombre Usuario&nbsp;&nbsp;</b>{{compa.nombre}}</p>
+	  			<p><b>Facultad&nbsp;&nbsp;</b>{{compa.facultad}}.</p>
+	  			<p><b>Titulación&nbsp;&nbsp;</b>{{compa.titulacion}}.</p>
+  			</div>
+  			<div class="user_files">
+  				<div class="container">
+		  			<p>{{compa.archivos_subidos}}</p>
+		  			<p><b>Archivos Subidos</b></p>
+	  			</div>
+	  			<div class="container">
+		  			<p>{{compa.descargas}}</p>
+		  			<p><b>Descargas</b></p>
+	  			</div>
+	  			<div class="container">
+		  			<p>{{compa.comentarios}}</p>
+		  			<p><b>Comentarios</b></p>
+	  			</div>
+	  			<div class="container">
+		  			<p>{{compa.posts}}</p>
+		  			<p><b>Posts</b></p>
+	  			</div>
+	  		</div>
+    		
+		</div>
+		
+		{% include 'user/footer.html' %}	
+	<script>
+		$(document).ready(function(){
+
+	    	$(".write").hide();
+	    	
+		    $("#buzones").click(function(){
+		    	$(".write").show();
+			    if ($(".write").hasClass("hide")){
+			    	
+			    	$(".write").hide();
+			    	$(".write").removeClass("hide");
+			    }
+
+				else{
+						
+					$(".write").show();
+					$(".write").addClass("hide");
+				}
+			   
+			});
+
+		});
+	</script>
+	</body>
+
+</html>

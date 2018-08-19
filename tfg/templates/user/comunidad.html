@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Comunidad</title>
+
+	<link href='https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Reenie+Beanie:regular ' rel='stylesheet' type='text/css'>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleComunidad.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+	</head>
+	<body>
+
+
+		{% include 'user/header.html' %}
+ 		{% include 'user/menu_user.html' %}
+
+
+		<div class="wrapper">
+
+  			<h1>Comunidad</h1>
+  			<p>Comparte información y curiosidades con tus compañeros.</p>
+  			<p>Filtrar:&nbsp;&nbsp;<select name="asunto"  id="filtro" style="width:120px">
+  										<option selected="true" disabled="disabled">Seleccione filtro</option>
+		  								<option value= "Examen" >Examen</option>
+		  								<option value= "Duda" >Duda</option>
+		  								<option value= "Evento" >Evento</option>
+		  								<option value= "Práctica" >Práctica</option>
+										<option value= "Entrega" >Entrega</option>
+									</select>
+			</p>
+  			<a class="button" >Crear Post </a>
+
+  			<div id="new_post">
+  				<a class = "icono_salir" href={{url_for('user.usuario_comunidad', nombre=usuario.nombre) }}   class="button" ><i class="fa fa-window-close-o fa-2x" aria-hidden="true"></i></a>
+    			<form class="form" method="post" id = "postform" action="/usuario/comunidad/finalizar_post">
+    				<p><input id="user_name" type = "hidden" name = "nombre" value = "{{usuario.nombre}}" /></p>
+    				<p><input type = "hidden" name = "titulacion" value = "{{titulacion}}" /></p>
+    				<div>
+    					<p>>Asunto
+    						<select name="asunto"  id="asunto" style="width:120px">
+    							<option value= "Duda" >Duda</option>
+		  						<option value= "Evento" >Evento</option>
+  								<option value= "Examen" >Examen</option>
+  								<option value= "Práctica" >Práctica</option>
+								<option value= "Entrega" >Entrega</option>
+							</select>
+						</p>
+					</div>
+    				<p><input type="text" name="titulo" class="pass" placeholder="Titulo"></p>
+
+    				<p><textarea rows="10" cols="40" name="body"  class="name" form="postform">< Descripcion de la tarea ></textarea></p>
+
+
+
+
+    			<input type="submit" class="submit" value="Crear Post">
+  			</form>
+
+
+			</div>
+
+
+
+		<div class = "muro">
+				{% for post in posts %}
+
+  					<div class="post">
+  						<div class="titulo_post">
+  							<a  href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=post.autor)}}     title={{post.autor}} ><img style="margin: 4px 4px 2px 4px;" class="avatar_post" tittle=post.autor src="{{url_for('static', filename='')}}{{post.autor_avatar}}" /></a>
+  							<div >{{post.autor}}&nbsp;&nbsp;{{post.fecha}}</div>
+  							<div>Asunto:{{post.tema}}</div>
+  							<div>Título:{{post.titulo}}</div>
+
+  						</div>
+  						<div class="cuerpo_post">
+  							<div style="min-height: 80%;">{{post.body}}</div>
+  							<div class="feedback">
+	  							<a href={{url_for('user.value_post', valor=0, post=post._id, usuario= usuario.nombre )}}   class="like" title="Votar Negativo"><i class="fa fa-thumbs-o-down fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{post.unlikes}}</a>
+	  							<a href={{url_for('user.value_post', valor=1, post=post._id, usuario= usuario.nombre )}}   class="like" title="Votar Positivo"><i class="fa fa-thumbs-o-up fa-lg"" aria-hidden="true"></i>&nbsp;&nbsp;{{post.likes}}</a>&nbsp;&nbsp;
+	  							<a href={{url_for('user.usuario_comunidad_denuncias', post=post._id, nombre= usuario.nombre )}}   class="like" title="Denunciar"><i class="fa fa-ban fa-lg" aria-hidden="true"></i></a>
+	  						</div>
+  						</div>
+
+
+  					</div>
+				{% endfor %}
+
+		</div>
+			{% include 'user/footer.html' %}
+		</div>
+		<div class="panel">
+			<div class="titulo">Top Uploaders</div>
+				<div class="ranking" >
+					{% for t in top_subidas %}
+					<div class="usuario_avatar">
+						<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=t.nombre)}}     title={{t.nombre}},&nbsp;{{t.archivos_subidos}}&nbsp;&nbsp;Archivos&nbsp;Subidos ><img class="avatar" tittle=t.nombre src="{{url_for('static', filename='')}}{{t.foto}}" /></a>
+						{{t.nombre}}
+					</div>
+					{% endfor %}
+				</div>
+			<div class="titulo_descargas">Top Descargas</div>
+				<div class="ranking_descargas" >
+					{% for d in top_descargas %}
+					<div class="usuario_avatar">
+						<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=d.nombre)}}     title={{d.nombre}}><img class="avatar" tittle=d.nombre src="{{url_for('static', filename='')}}{{d.foto}}" /></a>
+						{{d.nombre}}
+					</div>
+					{% endfor %}
+				</div>
+			<div class="titulo_comp">Compañeros</div>
+				<div class="comp" >
+					{% for c in compa %}
+					<div class="usuario_avatar">
+						<a href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=c.nombre)}} title={{c.nombre}}><img class="avatar" tittle=c.nombre src="{{url_for('static', filename='')}}{{c.foto}}" /></a>
+						{{c.nombre}}
+					</div>
+					{% endfor %}
+				</div>
+		</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $("#new_post").hide();
+
+		    $(".button").click(function(){
+		        $("#new_post").show();
+		        $(".button").hide();
+		    });
+		    $("icono_salir").click(function(){
+		        $("#new_post").hide();
+		    });
+
+
+			$("#filtro").change(function(){
+            	$.getJSON('/usuario/posts/filtrar',{
+						filtro: $('#filtro').val() , name: $('#user_name').val(),
+					},function(data){
+            $(".muro").html(data.result);
+
+
+    			});
+
+			});
+		});
+	</script>
+	</body>
+
+</html>

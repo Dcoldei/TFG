@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>UCM Community</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+
+		<div class="wrapper">
+  			<h1>{{facultad}}</h1>
+  			<a href={{url_for('admin.admin_borrar', facultad=facultad, usuario=usuario._id) }}   class="button" > Borrar Facultad</a>
+  			<h1>TITULACIONES:  
+  								</h1>
+  			{% for titulacion in vs %}
+  				<a href={{url_for('admin.admin_modificar_titul', usuario=usuario._id, titulacion=titulacion._id) }}   class="button" > {{titulacion.nombre}}</a>
+			{% endfor %}	
+			<h1>AÑADIR NUEVA TITULACION :  </h1>
+			<a href={{url_for('admin.modificar_titulacion_inicio', facultad=facultad, usuario=usuario._id) }}   class="button" > Agregar Titulacion</a>
+		</div>
+			
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

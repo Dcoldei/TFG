@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Horario</title>
+
+	<link href='https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Montserrat+Alternates ' rel='stylesheet' type='text/css'>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleHorario.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	</head>
+	<body>
+
+		{% include 'user/header.html' %}
+
+ 		{% include 'user/menu_user.html' %}
+
+
+
+		<div class="env_busqueda" style="top: 180px">
+			<div class="intro">
+				<button id="a_asig" class="button" >Añadir Asignatura</button>
+				<button id="e_asig" class="button" >Eliminar Asignatura</button>
+				<h1>Horario</h1>
+  				<p>Crea tu horario con las clases y actividades que tengas que realizar durante el curso.</p>
+
+			</div>
+			<button id="t" class="button" > Tarde </button>
+			<button id="m" class="button" > Mañana </button>
+			<div class="resul_busqueda" id="ma">
+				<div class="fila" style="position: sticky; top:80px; z-index: 3;background: white;border-radius: 25px;
+  				-moz-border-radius: 25px; -webkit-border-radius: 25px;">
+					<div class="celda_dias">Lunes</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Martes</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Miércoles</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Jueves</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Viernes</div>
+				</div>
+				{% for h in horas_ma %}
+	  				<div class="fila"
+	  				{% if (h.hora%2 != 0) %}
+			         	 style="background: #F5F5F5;"
+			        {% else %}
+			        	style="background: #FFFAF0;"
+			        {% endif %}
+	  				>
+	  					<div class="celda">
+	  						<div class="hora">{{h.hora}}:00</div>
+	  						{{h.l}}
+	  					</div>
+						<div class="celda">{{h.m}}</div>
+						<div class="celda">{{h.x}}</div>
+						<div class="celda">{{h.j}}</div>
+						<div class="celda">{{h.v}}</div>
+	  				</div>
+				{% endfor %}
+			</div>
+
+			<div class="resul_busqueda" id="tarde">
+				<div class="fila" style="position: sticky; top:80px; z-index: 3;background: white;border-radius:25px;-moz-border-radius: 25px; -webkit-border-radius: 25px;">
+					<div class="celda_dias">Lunes</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Martes</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Miércoles</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Jueves</div>
+					<div class="separador"></div>
+					<div class="celda_dias">Viernes</div>
+				</div>
+				{% for h in horas_tarde %}
+	  				<div class="fila"
+	  				{% if (h.hora%2 != 0) %}
+			         	 style="background: #F5F5F5;"
+			        {% else %}
+			        	style="background: #FFFAF0;"
+			        {% endif %}
+	  				>
+	  					<div class="celda">
+	  						<div class="hora">{{h.hora}}:00</div>
+	  						{{h.l}}
+	  					</div>
+						<div class="celda">{{h.m}}</div>
+						<div class="celda">{{h.x}}</div>
+						<div class="celda">{{h.j}}</div>
+						<div class="celda">{{h.v}}</div>
+	  				</div>
+				{% endfor %}
+			</div>
+			<div class="resul_busqueda" id="agregar">
+				<h1>Agregar Asignatura o Actividad</h1>
+				<form class="form" method="post" action="/usuario/horario/agregar">
+					<p ><input type = "hidden" name = "usuario" value = "{{usuario.nombre}}" /></p>
+					<p>Nombre Asignatura:<input id="nueva_asig" type="text" name="name" class="text" placeholder="Nueva Asignatura"></p>
+					<p>>Nº de Horas a la Semana
+	   					<select name="horas"  id="titul" style="width:120px" onchange='genList(this.value);'>
+	   						<option selected="true" disabled="disabled">Seleccione Nº Horas</option>
+	  						{% for n in range(1, 11) %}
+	  							<option value={{ n }}> {{n}} </option>
+							{% endfor %}
+						</select>
+					</p>
+					<div id='input_list'></div>
+					<button type="submit" id="enviar" class="button" > Enviar </button>
+				</form>
+			</div>
+			<div class="resul_busqueda" id="eliminar">
+				<h1>Eliminar Asignatura o Actividad</h1>
+				<form class="form" method="post" action="/usuario/horario/eliminar">
+					<p ><input type = "hidden" name = "usuario" value = "{{usuario.nombre}}" /></p>
+					<p>>Asignaturas o Actividades
+	   					<select name="asignatura"  id="titul" style="width:120px" onchange='genList(this.value);'>
+	  						{% for n in asig %}
+	  							<option value={{n}}> {{n}} </option>
+							{% endfor %}
+						</select>
+					</p>
+					<div id='input_list'></div>
+					<button type="submit" id="enviar" class="button" > Enviar </button>
+				</form>
+			</div>
+    	</div>
+    	{% include 'user/footer.html' %}
+    	<script>
+		$(document).ready(function(){
+
+
+	    	$("#tarde").hide();
+	    	$("#agregar").hide();
+	    	$("#eliminar").hide();
+
+
+			$("#t").click(function(){
+				$("#agregar").hide();
+				$("#tarde").show();
+				$("#eliminar").hide();
+				$("#ma").hide();
+
+		    });
+		    $("#m").click(function(){
+		    	$("#agregar").hide();
+				$("#tarde").hide();
+				$("#eliminar").hide();
+				$("#ma").show();
+
+		    });
+		    $("#a_asig").click(function(){
+				$("#tarde").hide();
+				$("#ma").hide();
+				$("#eliminar").hide();
+				$("#agregar").show();
+
+		    });
+		    $("#e_asig").click(function(){
+				$("#tarde").hide();
+				$("#ma").hide();
+				$("#agregar").hide();
+				$("#eliminar").show();
+
+		    });
+
+		});
+	</script>
+	<script>
+		function genList(num){
+		clean();
+		impar = 0;
+ 		par = 0;
+ 		for(var i = 0; i < num; i++){
+
+ 			var n = i + 1;
+ 			var myDiv = document.getElementById("input_list");
+
+
+				var array = ["Lunes","Martes","Miércoles","Jueves","Viernes"];
+				var selectList = document.createElement("select");
+				myDiv.appendChild(selectList);
+				selectList.name = 'dia' + n;
+
+			for (var j = 0; j < array.length; j++) {
+			    var option = document.createElement("option");
+			    option.value = array[j];
+		   	 	option.text = array[j];
+		   		selectList.appendChild(option);
+				}
+
+				var selectList = document.createElement("select");
+				myDiv.appendChild(selectList);
+				selectList.name = 'hora' + n;
+
+			for (var j = 9; j < 21; j++) {
+			    var option = document.createElement("option");
+			    option.value = j;
+		   	 	option.text = j;
+		   		selectList.appendChild(option);
+				}
+
+ 			}
+		}
+
+		function clean(){
+			list = document.getElementById('input_list');
+ 			while(list.childNodes.length){
+ 				list.removeChild(list.childNodes[list.childNodes.length - 1]);
+ 				}
+			}
+
+	</script>
+	</body>
+
+</html>

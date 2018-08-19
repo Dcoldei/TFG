@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Borrar Archivos</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+		<div class="wrapper">
+			<h1>Borrar Archivos</h1>
+			<br>
+			<p id="facultad" class="new"><b>Facultad >></b>
+    					<select name="f"  id="facul" style="width:120px">
+  							{% for facultad in facul %}
+  								<option value= "{{facultad._id}}" >{{ facultad.nombre }}</option>
+							{% endfor %}					
+						</select>
+			</p>
+  			<p id="titul" class="old"><b>Titulacion >></b>
+    					<select name="titulacion"  id="new_titulacion" style="width:120px">
+  							{% for titulacion in titul %}
+  								<option value= "{{titulacion._id}}" >{{ titulacion.nombre }}</option>
+							{% endfor %}					
+						</select>
+			</p>
+			<p id="asig" class="old"><b>Asignatura >></b>
+    					<select name="asignatua"  id="new_asig" style="width:120px">
+  							{% for a in asig %}
+  								<option value= "{{a._id}}" >{{ a.nombre }}</option>
+							{% endfor %}					
+						</select>
+			</p>
+			<br>
+  			<form class="form" method="post" action="/admin/archivo/borrar">
+  			  	<p><input type = "hidden" name = "nombre" value = "{{usuario._id}}" /></p>	
+		    	<div>
+		    		<p>>Elige el archivo que quieres borrar
+		    			<select name="borrar"  id="borrar" style="width:120px">
+		  					{% for archivo in archivos %}
+		  						<option value="{{ archivo._id }}">{{ archivo.nombre }}</option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+		    	<input type="submit" class="submit" value="Borrar">
+		  	</form>	
+
+		</div>	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	<script>
+		$(document).ready(function(){
+
+			var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			var name = {{usuario.nombre|tojson|safe}};
+
+			$("#facul").change(function(){
+            	$.getJSON('/admin/archivos/facultad/_search',{
+						busqueda: $('#facul').val(),
+					},function(data){
+        
+            $("#new_titulacion").html(data.result);
+            $("#new_asig").html(data.asignaturas);
+        	$("#borrar").html(data.archivos);
+
+
+    			});
+            
+			});
+
+			$("#new_titulacion").change(function(){
+
+            	$.getJSON('/admin/archivo/titulacion/_search',{
+						busqueda: $('#new_titulacion').val(),
+					},function(data){
+
+            $("#new_asig").html(data.asignaturas);
+        	$("#borrar").html(data.archivos);
+
+
+    			});
+            
+			});
+
+			$("#new_asig").change(function(){
+            	$.getJSON('/admin/archivo/asignatura/_search',{
+						busqueda: $('#new_asig').val(),
+					},function(data){
+        
+        	$("#borrar").html(data.archivos);
+
+        	
+    			});
+            
+			});
+
+		});
+	</script>
+	</body>
+
+</html>

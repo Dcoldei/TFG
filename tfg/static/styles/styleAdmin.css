@@ -1,0 +1,318 @@
+
+$full:100%;
+$auto:0 auto;
+$align:center;
+
+@mixin disable{
+  outline:none;
+  border:none;
+}
+
+@mixin easeme{
+  -webkit-transition:1s ease;
+  -moz-transition:1s ease;
+  -o-transition:1s ease;
+  -ms-transition:1s ease;
+  transition:1s ease;
+}
+  
+.button:hover {
+          background: #0b76a6;
+        }
+
+ .button {
+  display: inline-block;
+  height: 25px;
+  padding-top: 8px;
+  padding-bottom: 8px; 
+  padding-right: 30px;
+  padding-left: 30px;
+  position: relative;
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  15px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
+nav {
+  float: right;
+  font:18px Oswald;
+
+}
+  nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    padding-right: 20px;
+  }
+  
+    nav ul li {
+      display: inline-block;
+      line-height: 80px;
+    }
+      
+      nav ul li a {
+        display: block;
+        padding: 0 10px;
+        text-decoration: none;
+      }
+      
+        nav ul li a:hover {
+          background: #0b76a6;
+        }
+
+.wrapper{
+
+    position: absolute;
+    color: #FFFFFF;
+    top:40%;
+    left:25%;
+    width:600px;
+    margin-left:-200px;
+    height:450px;
+    margin-top:-150px;
+}
+
+.bloq{
+
+    position: absolute;
+    color: #FFFFFF;
+    top:32%;
+    left:55%;
+    width:600px;
+
+}
+
+.form_titulacion{
+
+    color: #FFFFFF;
+    width:600px;
+    margin-left:50px;
+    height:450px;
+    margin-top:30px;
+    border-bottom-color: #7FFF00;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+
+}
+.curso{
+
+    color: #FFFFFF;
+    width:150%;
+    margin-left:50px;
+    height:200px;
+    border-bottom-color: #7FFF00;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+
+}
+.nueva_asig{
+
+  position: relative;
+  bottom: 100%;
+  left: 60%;
+
+
+
+}
+
+.denuncias{
+  position: absolute;
+  color: black;
+  top:25%;
+  left:55%;
+  width:600px;
+  height: 40%;
+  border-style: solid;
+  border-width: 3px;
+  border-color : #198F67;
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+
+
+}
+h1{
+  text-align:$align;
+  padding:0px 0px 0px 0px;
+  font:25px Oswald;
+  color:    #000000;
+  text-transform:uppercase;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-bottom: : 30px;
+}
+
+p{
+  font:13px Open Sans;
+  color:    #000000;
+  /*text-shadow:#000 0px 1px 5px;*/
+  margin-top: :30px;
+  margin-bottom:  30px;
+}
+
+.form{
+  width:$full;
+}
+
+input[type="text"],input[type="password"]{
+  width:50%;
+  padding:15px 0px 15px 8px;
+  border-radius:5px;
+  -moz-box-shadow: inset 4px 6px 10px -4px rgba(0,0,0,0.3), 0 1px 1px -1px rgba(255,255,255,0.3);
+  -webkit-box-shadow: inset 4px 6px 10px -4px rgba(0,0,0,0.3), 0 1px 1px -1px rgba(255,255,255,0.3);
+  box-shadow:inset 4px 6px 10px -4px rgba(0,0,0,0.3), 0 1px 1px -1px rgba(255,255,255,0.3);
+  background:rgba(0,0,0,0.2);
+  @include disable;
+  border:1px solid rgba(0,0,0,1);
+  margin-bottom:10px;
+  color:#FFFFFF;
+  text-shadow:#000 0px 1px 5px;
+}
+
+input[type="submit"]{
+  width:20%;
+  padding:15px;
+  margin-bottom: 80px;
+  border-radius:5px;
+  @include disable;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from( #198F67), to(#6AF074));
+  background-image: -webkit-linear-gradient( #198F67 0%, #6AF074 100%);
+  background-image: -moz-linear-gradient( #198F67 0%, #6AF074 100%);
+  background-image: -o-linear-gradient( #198F67 0%, #6AF074 100%);
+  background-image: linear-gradient( #198F67 0%, #6AF074 100%);
+  font:14px Oswald;
+  color:#FFF;
+  text-transform:uppercase;
+  text-shadow:#000 0px 1px 5px;
+  border:1px solid #000;
+  opacity:0.7;
+  -webkit-box-shadow: 0 8px 6px -6px rgba(0,0,0,0.7);
+  -moz-box-shadow: 0 8px 6px -6px rgba(0,0,0,0.7);
+  box-shadow: 0 8px 6px -6px rgba(0,0,0,0.7);
+  border-top:1px solid rgba(255,255,255,0.8)!important;
+  -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(50%, transparent), to(rgba(255,255,255,0.2)));
+}
+.link_correo{
+
+  margin-left: 80px;  
+  font: 15px Oswald; 
+  color: #006400; 
+  text-decoration:none;
+  cursor: pointer;
+}
+.correo{
+
+  padding-top: 15px; 
+  padding-bottom: 15px; 
+  background-color:#FFFAFA;
+}
+.correo:hover{
+   background-color: #F5F5F5;
+
+} 
+input:focus{
+  box-shadow:inset 4px 6px 10px -4px rgba(0,0,0,0.7), 0 1px 1px -1px rgba(255,255,255,0.3);
+  background:rgba(0,0,0,0.3);
+}
+
+input[type="submit"]:hover{
+  opacity:1;
+  cursor:pointer;
+}
+
+.name-help,.email-help,.pass-help{
+  display:none;
+  padding:0px;
+  margin:0px 0px 15px 0px;
+}
+
+.optimize{
+  position:fixed;
+  right:3%;
+  top:0px;
+}
+
+.b:hover {
+         background: #FFFAF0;
+        }
+
+ .b {
+
+  background: white;
+  color:#198F67;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px; 
+  font:  14px Oswald;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-decoration: none;
+ 
+  
+}
+#e{
+   position: relative;
+   left: 30%;
+  top:60%;
+  height: 25px;
+  width: 80px;
+   display: inline-block;
+
+}
+#o{
+   position: relative;
+   left: 60%;
+  top:60%;
+  height: 25px;
+  width: 80px;
+   display: inline-block;
+
+}
+
+.titulo_denuncia{
+
+  position: relative;
+  top: 5%;
+  left: 5%;
+  font:14px Oswald; 
+  display: inline-block;
+
+
+}
+
+.fecha_denuncia{
+
+  position: relative;
+  top: 5%;
+  left: 30%;
+  font:14px Oswald; 
+  display: inline-block;
+
+
+}
+.autor_denuncia{
+
+  position: relative;
+  top: 5%;
+  left: 20%;
+  font:14px Oswald; 
+  display: inline-block;
+
+}
+
+.body_denuncia{
+
+ padding-left: 5%;
+ padding-top: 10%;
+ display: block;
+
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+   		<title>Pagina Registro</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+	</head>
+	<body>
+
+		<header id="main-header">
+		
+		<a id="logo-header" href="/">
+			<span class="site-name">UCM Community</span>
+			<span class="site-desc">Compañeros / Recursos  / Información </span>
+		</a> <!-- / #logo-header -->
+ 
+		
+ 
+		</header><!-- / #main-header -->
+
+ 
+
+		<div class="wrapper">
+  			<h1>Registrate</h1>
+  			<p>Para suscribirse a una cuenta básica gratuita, proporcione información básica utilizando
+  el formulario de contacto a continuación. Por favor use credenciales válidas.</p>
+  			<form class="form" enctype=multipart/form-data method="post" action="/registro/fin">
+  				<p><input type = "hidden" name = "facultad" value = "{{facultad}}" /></p>
+    			<input type="text" name="nombre"  class="name" placeholder="Nick" required>
+    			<div>
+      				<p class="name-help">Por favor introduzca un nombre de usuario.</p>
+    			</div>
+    			{% if error %}				
+    			<p style="color:#FF0000";> El usuario escogido ya existe por favor elija otro en su lugar. </p>
+    			{% endif %}
+    			<input type="password" name="password" class="pass" placeholder="Contraseña" required>
+     			<div>
+      				<p class="pass-help">Por favor introduzca una contraseña.</p>
+    			</div>
+    			<input type="text" name="email"  class="email" placeholder="e-mail" required>
+    			<div>
+      				<p class="email-help">Por favor introduzca un correo válido.</p>
+    			</div>
+          <p>>Selecciona un avatar para la cuenta</p>
+          <p><input type=file name=file required></p>
+    			<div>
+    				<p>>Elige tu titulacion
+    					<select name="titulacion"  id="titul" style="width:120px">
+  							{% for titulacion in vs %}
+  								<option value= "{{titulacion}}" >{{ titulacion }}</option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+				<div id='input_list'></div>
+    			<input type="submit" class="submit" value="Registrar">
+  			</form>
+  			
+		</div>
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>

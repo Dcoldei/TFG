@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/menu_user.css') }}">
+
+</head>
+<body>
+
+
+	<div class="menu">
+ 		<div class="menu_usuario">
+			<ul class="usuario">
+				<li><a class="enlace" href={{url_for('user.usuario_volver_inicio', nombre=usuario.nombre) }}>Recursos</a></li>
+				<li><a class="enlace" href= {{url_for('user.usuario_comunidad', nombre=usuario.nombre) }} >Comunidad</a></li>
+				<li><a class="enlace" href={{url_for('user.usuario_horario', nombre=usuario.nombre) }}>Horario</a></li>
+				<li><a class="enlace" href="{{url_for('user.usuario_anotaciones', nombre=usuario.nombre) }}">Anotaciones</a></li>
+				<li><a class="enlace" href= {{url_for('user.usuario_enlaces', nombre=usuario.nombre) }} >Enlaces</a></li>
+			</ul>
+		</div> 		
+	</div>
+
+</body>
+</html> 

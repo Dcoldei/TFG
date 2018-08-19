@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>UCM Community</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+		<div class="wrapper">
+  			<h1>{{titulacion.nombre}}</h1>
+  			<a href={{url_for('admin.admin_borrar_titul', titulacion=titulacion._id, usuario=usuario._id) }}   class="button" > Borrar Titulacion</a>
+  			<a href={{url_for('admin.admin_agregar_curso', nombre=titulacion._id, usuario=usuario._id) }}   class="button" > Añadir Curso</a>
+  			<h1>ASIGNATURAS X CURSO: </h1>
+  			{% for curso in cursos %}
+  				<h1>{{curso.numero}}º CURSO: </h1>
+	  			<div class="curso">
+		  			<form class="form" method="post" action="/admin/borrar_asignatura">
+		  				<p><input type = "hidden" name = "titulacion" value = "{{titulacion.nombre}}" /></p>
+						<p><input type = "hidden" name = "curso" value = {{curso.numero}} /></p>
+						<p><input type = "hidden" name = "usuario" value = {{usuario._id}} /></p>
+		    			<div>
+		    				<p>>Elige la asignatura a borrar en este curso
+		    					<select name="asignatura_{{curso.numero}}"  id="facul" style="width:120px">
+		  							{% for asignatura in curso.asignaturas %}
+		  								<option value="{{ asignatura }}">{{ asignatura }}</option>
+									{% endfor %}					
+								</select>
+							</p>
+						</div>
+		    			<input type="submit" class="submit" value="Borrar">
+		  			</form>
+		  			<div class="nueva_asig">
+			  			<h1>Añadir nueva asignatura :  </h1>
+						<a href={{url_for('admin.agregar_asig', titulacion=titulacion.nombre, curso = curso.numero, usuario=usuario._id) }}   class="button" > Agregar Asignatura</a>
+					</div>
+				</div>
+			{% endfor %}	
+		</div>
+			
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	</body>
+
+</html>
