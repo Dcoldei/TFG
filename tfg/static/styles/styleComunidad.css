@@ -100,10 +100,7 @@
     position: absolute;
     top:30%;
     left:0%;
-<<<<<<< HEAD
     width: 100%;
-=======
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
     margin-left: 80px;
     min-height: 75%;
 }
@@ -230,11 +227,7 @@
   border-color: black;
   border-style: solid;
   border-width: 2px;
-<<<<<<< HEAD
   width: 550px;
-=======
-  width: 500px;
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   background:white;
 
 
@@ -249,11 +242,7 @@
   border-top-style:solid;
   border-top-color: black;
   border-width: 2px;
-<<<<<<< HEAD
   width: 550px;
-=======
-  width: 100%;
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   height: 170px;
   font:  15px Amiko;
   border-radius: 5px;
@@ -299,11 +288,7 @@
   position: absolute;
   left: 0%;
   top: 100%;
-<<<<<<< HEAD
   width: 100%;
-=======
-  width: 105%;
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   background-color:#282828;
   color: white;
   height:100px;

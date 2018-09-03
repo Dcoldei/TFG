@@ -3,11 +3,7 @@
 
 html {
 
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
     }
 
 body{
@@ -34,7 +30,6 @@ $align:center;
   -ms-transition:1s ease;
   transition:1s ease;
 }
-<<<<<<< HEAD
 
 .back{
   height: 25px;
@@ -63,37 +58,20 @@ $align:center;
   margin-left: 80px;
   font: 15px Oswald;
   color: #006400;
-=======
-.link_correo{
-
-  margin-left: 80px;  
-  font: 15px Oswald; 
-  color: #006400; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   text-decoration:none;
 }
 .correo{
 
 
-<<<<<<< HEAD
   padding-top: 15px;
   padding-bottom: 15px;
-=======
-  padding-top: 15px; 
-  padding-bottom: 15px; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   background-color:#FFFAFA;
 }
 .correo:hover{
    background-color: #F5F5F5;
 
-<<<<<<< HEAD
 }
 
-=======
-} 
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 .button:hover {
           color: #0b76a6;
         }
@@ -108,11 +86,7 @@ $align:center;
   background: white;
   color:#198F67;
   text-decoration: none;
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   font:  18px Oswald;
   text-align: center;
   left: 400px;
@@ -121,11 +95,7 @@ $align:center;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   text-shadow:0px 1px 0px rgba(0,0,0,0.5);
-<<<<<<< HEAD
   outline:none;
-=======
-  outline:none; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   border-style: none;
 }
 .buzon {
@@ -156,11 +126,7 @@ $align:center;
   width: 150px;
 
   padding: 30px 5px 2px 5px;
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   background-color:#198F67;
   color:rgb(255,255,255);
   text-decoration: none;
@@ -189,28 +155,18 @@ $align:center;
 
 
 .enlace:hover{
-<<<<<<< HEAD
 
   color : red;
 
 }
 .menu_usuario{
 
-=======
-  
-  color : red;
-  
-}
-.menu_usuario{
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   font:20px Oswald;
   text-align: center;
   border-bottom-style: solid;
   border-bottom-color: #00FF00;
 }
 .menu_usuario a{
-<<<<<<< HEAD
 
   color : #696969;
 
@@ -219,16 +175,6 @@ $align:center;
 ul.usuario li
 {
 
-=======
-  
-  color : #696969;
-  
-}
-
-ul.usuario li 
-{
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    width:280px;
 }
    ul.usuario {
@@ -237,20 +183,12 @@ ul.usuario li
     list-style: none;
     padding-right: 20px;
   }
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
      ul.usuario li {
       display: inline-block;
       line-height: 80px;
     }
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
        ul.usuario li a {
         display: block;
         padding: 0 10px;
@@ -266,11 +204,7 @@ top :5%;
 left: 70%;
 height: 25px;
   width: 30px;
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   color:#198F67;
   cursor: pointer;
 }
@@ -278,11 +212,7 @@ height: 25px;
 .write{
 
   position: absolute;
-<<<<<<< HEAD
     top:0%;
-=======
-    top:0%;    
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
     border-style: solid;
     border-color: black;
     border-width: 3px;
@@ -295,11 +225,7 @@ height: 25px;
 .write_perfil{
 
   position: relative;
-<<<<<<< HEAD
     top:15%;
-=======
-    top:15%;    
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
     width:850px;
     height:300px;
     background: white;
@@ -394,11 +320,7 @@ p b.est{
 }
 .mensaje_body
 {
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    position: absolute;
    left: 30%;
    top:25%;
@@ -412,11 +334,7 @@ p b.est{
    position: absolute;
    left: 80%;
    top:5%;
-<<<<<<< HEAD
    border-color:#198F67;
-=======
-   border-color:#198F67; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    border-style : solid;
 }
 .avatar_mensaje{
@@ -425,11 +343,7 @@ p b.est{
    position: absolute;
    left: 10%;
    top:25%;
-<<<<<<< HEAD
    border-color:#198F67;
-=======
-   border-color:#198F67; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    border-style : solid;
    float: left;
 
@@ -440,11 +354,7 @@ p b.est{
    position: absolute;
    left: 10%;
    top:0%;
-<<<<<<< HEAD
    border-color:#198F67;
-=======
-   border-color:#198F67; 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    border-style : solid;
 }
 
@@ -485,20 +395,12 @@ input[type="text"],input[type="password"]{
   width:15%;
   padding:2px 0px 5px 5px;
   border-radius:5px;
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   @include disable;
   border:1px solid rgba(0,0,0,1);
   margin-left: 10px;
   color:black;
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 }
 .footer {
   margin-top:150px;
@@ -508,11 +410,7 @@ input[type="text"],input[type="password"]{
    width: 100%;
    background-color:#282828;
    color: white;
-<<<<<<< HEAD
 
-=======
-   
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
     height:100px;
 }
 .upload {

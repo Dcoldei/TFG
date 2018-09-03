@@ -1,6 +1,5 @@
 .menu{
 
-<<<<<<< HEAD
     background: #FFFFFF;
     position: absolute;
     color: #FFFFFF;
@@ -16,52 +15,23 @@
   text-align: center;
 
 
-=======
-    background: #FFFFFF; 
-    position: absolute;
-    color: #FFFFFF;
-    top:240px;
-    width:100%;
-    height:100px;
-    z-index: 6;
-    margin-top:-150px;
-    
-}
-.menu_usuario{
-  
-  font:20px Oswald;
-  text-align: center;
-  
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   border-bottom-style: solid;
   border-left-style: solid;
 
 
   border-bottom-color: #00FF00;
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 
 
 }
 .menu_usuario a{
-<<<<<<< HEAD
 
   color : #696969;
 
-=======
-  
-  color : #696969;
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 
 
 }
 .enlace:hover{
-<<<<<<< HEAD
 
   color : red;
 
@@ -69,15 +39,6 @@
 ul.usuario li
 {
 
-=======
-  
-  color : red;
-  
-}
-ul.usuario li 
-{
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
    width:16%;
 }
    ul.usuario {
@@ -86,20 +47,12 @@ ul.usuario li
     list-style: none;
     padding-right: 20px;
   }
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
      ul.usuario li {
       display: inline-block;
       line-height: 80px;
     }
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
        ul.usuario li a {
         display: block;
         padding: 0 10px;

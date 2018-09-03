@@ -84,7 +84,6 @@
   font:18px Oswald;
 
 }
-<<<<<<< HEAD
 
 
 }
@@ -95,54 +94,20 @@ ul.list{
   margin: 20 0;
   padding: 30;
   overflow: hidden;
-=======
-.list_left{
-
-  position: absolute;
-  left: 0%;
-
-}
-.list_center{
-
-  position: absolute;
-  left: 25%;
-  z-index: 6;
-  background: white;
-
-}
-.list_right{
-
-  position: absolute;
-  left: 55%;
-  z-index: 6;
-  background: white;
-
-}
-ul.list{
-  list-style-position: inside;
-  padding: 5px;
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 
 }
 ul li.list{
 
-<<<<<<< HEAD
   float: left;
   width: 33%;
   margin: 20px 0;
-=======
-  padding: 10px;
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 }
 .links{
   text-decoration: none;
   font-family: 'Oswald', sans-serif;
   font-size: 20px;
   color:    #000080;
-<<<<<<< HEAD
   margin: 30;
-=======
->>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 
 }
 .links:hover{
