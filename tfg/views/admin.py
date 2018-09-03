@@ -158,6 +158,7 @@ def admin_nuevo_pass():
 	textosalida = '''<b>Password >> </b>'''+request.args.get('nuevo_pass')+'''<button id="usuario_password"   class="button" > Editar </button>'''
 	return jsonify(result=textosalida)
 
+
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS ENLACES                                                                          #
@@ -247,6 +248,7 @@ def admin_enlaces_agregar():
 		Enlaces.insert(enlace)
 
 		return redirect(url_for('admin.admin_enlaces' , nombre = u._id))
+
 
 
 ###################################################################################################################

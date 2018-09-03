@@ -141,6 +141,7 @@ class Curso(Document):
 	num_asignaturas = 'num_asignaturas'
 	asignaturas = 'asignaturas'
 
+
 class Enlaces(Document):
 
 	config_database = 'trabajofingrado'
@@ -149,6 +150,7 @@ class Enlaces(Document):
 	id_titulacion = 'id_titulacion'
 	enlace = 'enlace'
 	nombre = 'nombre'
+
 
 
 class Asignatura(Document):

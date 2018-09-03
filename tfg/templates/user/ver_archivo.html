@@ -89,11 +89,19 @@
   					</form>
 
   				</div>
+<<<<<<< HEAD
 				<a name="comment" id="exactlocation" class="comment" ><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;Añadir Comentario</a>
   				<h2>Comentarios</h2>
 
   				{% for comentario in comentarios %}
   					<div class="comentario" id={{comentario.fecha}}>
+=======
+				<a class="comment" ><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;Añadir Comentario</a>
+  				<h2>Comentarios</h2>
+
+  				{% for comentario in comentarios %}
+  					<div class="comentario">
+>>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
   						<div class="titulo_comentario">
   							<div style="float: left; margin-right: 5px;"><img class="avatar" src="{{url_for('static', filename='')}}{{comentario.autor_avatar}}" /></div>
 	  						<div><b>Título: </b>{{comentario.titulo}}</div>

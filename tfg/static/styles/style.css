@@ -117,7 +117,11 @@ nav {
 
     /*nos posicionamos en el centro del navegador*/
 
+<<<<<<< HEAD
     top:38%;
+=======
+    top:45%;
+>>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 
     left:50%;
 
@@ -164,10 +168,14 @@ h1{
   /*text-shadow:#000 0px 1px 5px;*/
   margin:0px;
 }
+<<<<<<< HEAD
 span {
 
   font: 20px Oswald;
 }
+=======
+
+>>>>>>> e685df16ab1c8628cdfc44e901053d5ab5266571
 p{
   font:13px Open Sans;
   color:    #000000;
