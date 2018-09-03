@@ -1,37 +1,10 @@
-/*dark background to support form theme*/
 
-
-html {
-
+html,body{
   height:100%;
   width:100%;
-
-    }
-
-body{
-  background: #FFFFFF;
-  /*background-image: url("fondo.png");
-  background-size:100% 100%;*/
-
+  margin: 0;
 }
 
-/*sass variables used*/
-$full:100%;
-$auto:0 auto;
-$align:center;
-
-@mixin disable{
-  outline:none;
-  border:none;
-}
-
-@mixin easeme{
-  -webkit-transition:1s ease;
-  -moz-transition:1s ease;
-  -o-transition:1s ease;
-  -ms-transition:1s ease;
-  transition:1s ease;
-}
 #main-header {
   background: #198F67 ;
   color: white;
@@ -40,11 +13,11 @@ $align:center;
 -moz-border-radius: 8px 8px 8px 8px;
 -webkit-border-radius: 8px 8px 8px 8px;
 border: 0px solid #000000;
-} 
+}
   #main-header a {
     color: white;
   }
- 
+
 /*
  * Logo
  */
@@ -56,13 +29,13 @@ border: 0px solid #000000;
   #logo-header:hover {
     color: #0b76a6;
   }
-  
+
   #logo-header .site-name {
     display: block;
     font-weight: 700;
     font-size: 1.2em;
   }
-  
+
   #logo-header .site-desc {
       margin-top: 0.8em;
     display: block;
@@ -70,7 +43,7 @@ border: 0px solid #000000;
     font-size: 0.8em;
     color: #999;
   }
-  
+
 .button:hover {
           background: #0b76a6;
         }
@@ -90,8 +63,8 @@ border: 0px solid #000000;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 15px;
-  
-  
+
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -120,18 +93,18 @@ nav {
     list-style: none;
     padding-right: 20px;
   }
-  
+
     nav ul li {
       display: inline-block;
       line-height: 80px;
     }
-      
+
       nav ul li a {
         display: block;
         padding: 0 10px;
         text-decoration: none;
       }
-      
+
         nav ul li a:hover {
           background: #0b76a6;
         }
@@ -144,7 +117,7 @@ nav {
 
     /*nos posicionamos en el centro del navegador*/
 
-    top:45%;
+    top:38%;
 
     left:50%;
 
@@ -164,7 +137,7 @@ nav {
 
     margin-top:-150px;
 
-    
+
 }
 .num{
   margin-left: 30px;
@@ -191,7 +164,10 @@ h1{
   /*text-shadow:#000 0px 1px 5px;*/
   margin:0px;
 }
+span {
 
+  font: 20px Oswald;
+}
 p{
   font:13px Open Sans;
   color:    #000000;

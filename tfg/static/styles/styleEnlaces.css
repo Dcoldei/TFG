@@ -1,6 +1,6 @@
 
 
-  
+
 .button:hover {
           background: #0b76a6;
         }
@@ -11,7 +11,7 @@
   width: 75px;
 
   padding-top: 2px;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
   padding-right: 10px;
   padding-left: 10px;
   position: relative;
@@ -23,7 +23,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -35,7 +35,7 @@
   width: 150px;
 
   padding-top: 2px;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
   padding-right: 10px;
   padding-left: 10px;
   position: relative;
@@ -47,7 +47,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -60,8 +60,8 @@
   position: absolute;
   left: 500px;
   top: 0px;
-  
- 
+
+
   background-color:#198F67;
   color:rgb(255,255,255);
   text-decoration: none;
@@ -70,7 +70,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -84,45 +84,30 @@
   font:18px Oswald;
 
 }
-.list_left{
 
-  position: absolute;
-  top: 20%;
-  left: 0%;
-
-}
-.list_center{
-
-  position: absolute;
-  top: 20%;
-  left: 25%;
-  z-index: 6;
-  background: white;
-
-}
-.list_right{
-
-  position: absolute;
-  top: 20%;
-  left: 55%;
-  z-index: 6;
-  background: white;
 
 }
 ul.list{
-  list-style-position: inside;
-  padding: 5px;
-  
+   background: #F4F4F4;
+  border: 1px solid #7C7C7C;
+  list-style: none;
+  margin: 20 0;
+  padding: 30;
+  overflow: hidden;
+
 }
 ul li.list{
-  
-  padding: 10px;
+
+  float: left;
+  width: 33%;
+  margin: 20px 0;
 }
 .links{
   text-decoration: none;
   font-family: 'Oswald', sans-serif;
   font-size: 20px;
   color:    #000080;
+  margin: 30;
 
 }
 .links:hover{
@@ -131,33 +116,33 @@ ul li.list{
   color: #FF6347;
 }
 .menu_usuario{
-  
+
   font:20px Oswald;
   text-align: center;
-  
-  
-  
+
+
+
   border-bottom-style: solid;
 
 
   border-bottom-color: #00FF00;
- 
+
 
 
 }
 .menu_usuario a{
-  
+
   color : #696969;
-  
+
 
 
 }
 
 
 .enlace:hover{
-  
+
   color : red;
-  
+
 }
 
 
@@ -172,10 +157,10 @@ h2,p{
 
     /*background: #FFFFFF;*/
     position: absolute;
-    
+
     /*nos posicionamos en el centro del navegador*/
 
-    top:30%;
+    top:220px;
 
     left:0%;
 
@@ -187,7 +172,7 @@ h2,p{
 
     /*indicamos que el margen izquierdo, es la mitad de la anchura*/
     margin-left: 80px;
-    
+
 
     /*determinamos una altura*/
 
@@ -196,14 +181,14 @@ h2,p{
     border-right-color: black;
     border-right-style: solid;
     border-width: 3px;
-    
 
-    
+
+
 }
 .ranking{
 
     position: absolute;
-    top:35%;
+    top:250px;
     left:75%;
     width:300px;
     height: 168px;
@@ -215,14 +200,14 @@ h2,p{
 
 
 .footer {
-  
+
    position: absolute;
    left: 0%;
   top: 100%;
    width: 100%;
    background-color:#282828;
    color: white;
-   
+
     height:100px;
 }
 
@@ -231,7 +216,7 @@ h1{
   text-align:$align;
   padding:0px 0px 0px 0px;
   font:25px Oswald;
-  
+
   color:    #000000;
   text-transform:uppercase;
   /*text-shadow:#000 0px 1px 5px;*/
@@ -243,7 +228,7 @@ p{
   color:    #000000;
   /*text-shadow:#000 0px 1px 5px;*/
   margin-top: :30px;
- 
+
   margin-bottom:  30px;
 }
 

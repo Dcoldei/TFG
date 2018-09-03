@@ -2,10 +2,10 @@
 <head>
 <style type="text/css">
   #main-header {
-   
+
 position:fixed;
-z-index: 26; 
-  top: 0%;                    /* Distancia hasta el borde superior */ 
+z-index: 26;
+  top: 0%;                    /* Distancia hasta el borde superior */
     left: 0%;            /* Distancia hasta el borde izquierdo */
   width: 100%;
   background: #198F67 ;
@@ -15,11 +15,11 @@ z-index: 26;
 -moz-border-radius: 8px 8px 8px 8px;
 -webkit-border-radius: 8px 8px 8px 8px;
 border: 0px solid #000000;
-} 
+}
   #main-header a {
     color: white;
   }
- 
+
 /*
  * Logo
  */
@@ -31,13 +31,13 @@ border: 0px solid #000000;
   #logo-header:hover {
     color: #0b76a6;
   }
-  
+
   #logo-header .site-name {
     display: block;
     font-weight: 700;
    font: 20px Oswald;
   }
-  
+
   #logo-header .site-desc {
       margin-top: 0.8em;
     display: block;
@@ -59,24 +59,24 @@ nav {
     list-style: none;
     padding-right: 20px;
   }
-  
+
     nav ul li {
       display: inline-block;
       line-height: 80px;
     }
-      
+
       nav ul li a {
         display: block;
         padding: 0 10px;
         text-decoration: none;
       }
-      
+
         nav ul li a:hover {
           background: #0b76a6;
         }
 
-      
-         
+
+
 
 
 
@@ -87,12 +87,12 @@ nav {
 
 
 	<header id="main-header">
-		
+
 		<a id="logo-header" href="/">
-			<span class="site-name">UCM Community</span>
+			<span class="site-name">shareStudy</span>
 			<span class="site-desc">Compañeros / Recursos  / Información </span>
 		</a> <!-- / #logo-header -->
- 
+
 		<nav>
 			<ul>
 				<li><a href={{url_for('user.usuario_volver_inicio', nombre=usuario.nombre) }}>Inicio</a></li>
@@ -104,8 +104,8 @@ nav {
           </a></li>
 			</ul>
 		</nav><!-- / nav -->
- 
+
 		</header><!-- / #main-header -->
 
 </body>
-</html> 
+</html>

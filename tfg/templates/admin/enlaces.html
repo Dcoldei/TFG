@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+   		<title>Borrar Archivos</title>
+	  
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleAdmin.css') }}">
+	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
+
+	</head>
+	<body>
+
+		{% include 'admin/header_admin.html' %}
+
+
+		<div class="wrapper">
+			<h1>Borrar Enlace</h1>
+			<br>
+			<p id="facultad" class="new"><b>Facultad >></b>
+    					<select name="f"  id="facul" style="width:120px">
+  							{% for facultad in facul %}
+  								<option value= "{{facultad._id}}" >{{ facultad.nombre }}</option>
+							{% endfor %}					
+						</select>
+			</p>
+  			<p id="titul" class="old"><b>Titulacion >></b>
+    					<select name="titulacion"  id="new_titulacion" style="width:120px">
+  							{% for titulacion in titul %}
+  								<option value= "{{titulacion._id}}" >{{ titulacion.nombre }}</option>
+							{% endfor %}					
+						</select>
+			</p>
+			<br>
+  			<form class="form" method="post" action="/admin/enlaces/borrar">
+  			  	<p><input type = "hidden" name = "nombre" value = "{{usuario._id}}" /></p>	
+		    	<div>
+		    		<p>>Elige el enlace que quieres borrar
+		    			<select name="borrar"  id="borrar" style="width:120px">
+		  					{% for enlace in enlaces %}
+		  						<option value="{{ enlace._id }}">{{ enlace.nombre }}</option>
+							{% endfor %}					
+						</select>
+					</p>
+				</div>
+		    	<input type="submit" class="submit" value="Borrar">
+		  	</form>	
+
+		  	<div class="new_link" >
+		  		<h1 id="new_link_title" >Añadir Enlace</h1>
+		  		<form class="form" method="post" action="/admin/enlaces/agregar">
+	  			  	<p><input type = "hidden" name = "nombre" value = "{{usuario._id}}" /></p>	
+			    	<div>
+			    		<p>>Elige la titulación 
+			    			<select name="enlace"  id="enlace" style="width:120px">
+			  					{% for titulacion in titulaciones %}
+			  						<option value="{{ titulacion._id }}">{{ titulacion.nombre }}</option>
+								{% endfor %}					
+							</select>
+						</p>
+					</div>
+					<div>
+						<input type="text" name="nombre"  class="name" placeholder="Nombre">
+						<input type="text" name="url"  class="name" placeholder="Dirección URL">
+					</div>
+			    	<input type="submit" class="submit" id="new_link_submit" value="Finalizar">
+		  		</form>	
+
+		  	</div>
+
+		</div>	
+	<script type=text/javascript src="{{ url_for('static',filename='script.js') }}" ></script> 
+	<script>
+		$(document).ready(function(){
+
+			var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			var name = {{usuario.nombre|tojson|safe}};
+
+			$("#facul").change(function(){
+            	$.getJSON('/admin/enlaces/facultad/_search',{
+						busqueda: $('#facul').val(),
+					},function(data){
+        
+            $("#new_titulacion").html(data.result);
+        	$("#borrar").html(data.enlaces);
+
+
+    			});
+            
+			});
+
+			$("#new_titulacion").change(function(){
+
+            	$.getJSON('/admin/enlaces/titulacion/_search',{
+						busqueda: $('#new_titulacion').val(),
+					},function(data){
+
+        	$("#borrar").html(data.enlaces);
+
+
+    			});
+            
+			});
+
+		});
+	</script>
+	</body>
+
+</html>

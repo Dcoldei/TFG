@@ -8,7 +8,7 @@ import datetime
 class Usuario(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'usuarios'
-	
+
 	nombre = 'nombre'
 	password = 'password'
 	role = 'role'
@@ -45,12 +45,12 @@ class Usuario(Document):
 
 class Buzon:
 	def __init__(self, nombre):
-		self.no_leidos = nombre  
+		self.no_leidos = nombre
 
 class Mensaje(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'buzon'
-	
+
 	asunto = 'asunto'
 	id_usuario = 'id_usuario'
 	autor = 'autor'
@@ -63,9 +63,9 @@ class Mensaje(Document):
 class Horario(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'horario'
-	
+
 	hora = 'hora'
-   	
+
    	l = 'l'
    	m= 'm'
    	x = 'x'
@@ -73,14 +73,14 @@ class Horario(Document):
    	v = 'v'
 
    	id_usuario = 'id_usuario'
-   	
+
 
 
 
 class Post(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'posts'
-	
+
 	tema = 'tema'
 	titulo = 'titulo'
 	id_titulacion = 'id_titulacion'
@@ -89,13 +89,15 @@ class Post(Document):
 	autor = 'autor'
 	autor_avatar = 'autor_avatar'
 	body = "body"
+	votos= "votos"
 	fecha = "fecha"
 	denuncia = 'denuncia'
+	votos = "votos"
 
 class Notas(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'notas'
-	
+
 	titulo = 'titulo'
 	fecha = 'fecha'
 	descripcion = 'descripcion'
@@ -108,12 +110,12 @@ class Notas(Document):
 class Facultad(Document):
 	config_database = 'trabajofingrado'
 	config_collection = 'facultades'
-	
+
 	nombre = 'nombre'
 	titulaciones = 'titulaciones'
 	num_titul = 'num_titulaciones'
 	cursos_x_titul = 'cursos_x_titul'
-	
+
 
 class Titulacion(Document):
 	config_database = 'trabajofingrado'
@@ -125,7 +127,7 @@ class Titulacion(Document):
 	num_cursos = 'cursos'
 	asignaturas = 'asignaturas'
 
-	
+
 
 
 
@@ -139,6 +141,16 @@ class Curso(Document):
 	num_asignaturas = 'num_asignaturas'
 	asignaturas = 'asignaturas'
 
+class Enlaces(Document):
+
+	config_database = 'trabajofingrado'
+	config_collection = 'enlaces'
+
+	id_titulacion = 'id_titulacion'
+	enlace = 'enlace'
+	nombre = 'nombre'
+
+
 class Asignatura(Document):
 
 	config_database = 'trabajofingrado'
@@ -148,7 +160,7 @@ class Asignatura(Document):
 	id_curso = 'id_curso'
 	num_ficheros = 'num_ficheros'
 	nombre_ficheros = 'nombre_ficheros'
-	
+
 
 
 class Archivo(Document):
@@ -190,12 +202,13 @@ class Comentario(Document):
 	body = "body"
 	fecha = "fecha"
 	denuncia = 'denuncia'
+	votos = 'votos'
 
 class Comments(Array):
 	config_database = 'trabajofingrado'
 	config_collection = 'comentarios'
 	config_padding = 1000 # Number of bytes to pad with
-	config_max_size = 3  # Number of entries per page	
+	config_max_size = 3  # Number of entries per page
 	titulo = 'titulo'
 	id_archivo = 'id_archivo'
 	likes = 'likes'
@@ -213,7 +226,7 @@ class User(UserMixin):
         self._id = password
 
     def is_authenticated(self):
-        return True  
+        return True
 
     def is_active(self):
         return True

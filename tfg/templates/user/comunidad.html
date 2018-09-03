@@ -3,20 +3,20 @@
 	<head>
 		<meta charset="utf-8">
    		<title>Comunidad</title>
-	  
+
 	<link href='https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Reenie+Beanie:regular ' rel='stylesheet' type='text/css'>
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
 	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleComunidad.css') }}">
 	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
 
 	</head>
 	<body>
 
-		
+
 		{% include 'user/header.html' %}
  		{% include 'user/menu_user.html' %}
 
- 		
+
 		<div class="wrapper">
 
   			<h1>Comunidad</h1>
@@ -27,7 +27,7 @@
 		  								<option value= "Duda" >Duda</option>
 		  								<option value= "Evento" >Evento</option>
 		  								<option value= "Práctica" >Práctica</option>
-										<option value= "Entrega" >Entrega</option>				
+										<option value= "Entrega" >Entrega</option>
 									</select>
 			</p>
   			<a class="button" >Crear Post </a>
@@ -44,35 +44,35 @@
 		  						<option value= "Evento" >Evento</option>
   								<option value= "Examen" >Examen</option>
   								<option value= "Práctica" >Práctica</option>
-								<option value= "Entrega" >Entrega</option>				
+								<option value= "Entrega" >Entrega</option>
 							</select>
 						</p>
 					</div>
     				<p><input type="text" name="titulo" class="pass" placeholder="Titulo"></p>
-    				
+
     				<p><textarea rows="10" cols="40" name="body"  class="name" form="postform">< Descripcion de la tarea ></textarea></p>
-    				
-    				
-    			
-				
+
+
+
+
     			<input type="submit" class="submit" value="Crear Post">
   			</form>
-  			
-			
+
+
 			</div>
-			
-		
-		
+
+
+
 		<div class = "muro">
 				{% for post in posts %}
-				
+
   					<div class="post">
   						<div class="titulo_post">
   							<a  href={{url_for('user.ver_comp', usuario=usuario.nombre , nombre=post.autor)}}     title={{post.autor}} ><img style="margin: 4px 4px 2px 4px;" class="avatar_post" tittle=post.autor src="{{url_for('static', filename='')}}{{post.autor_avatar}}" /></a>
   							<div >{{post.autor}}&nbsp;&nbsp;{{post.fecha}}</div>
   							<div>Asunto:{{post.tema}}</div>
   							<div>Título:{{post.titulo}}</div>
-  							
+
   						</div>
   						<div class="cuerpo_post">
   							<div style="min-height: 80%;">{{post.body}}</div>
@@ -82,16 +82,16 @@
 	  							<a href={{url_for('user.usuario_comunidad_denuncias', post=post._id, nombre= usuario.nombre )}}   class="like" title="Denunciar"><i class="fa fa-ban fa-lg" aria-hidden="true"></i></a>
 	  						</div>
   						</div>
-  						
-  						
+
+
   					</div>
-				{% endfor %}	
+				{% endfor %}
 
 		</div>
 			{% include 'user/footer.html' %}
 		</div>
 		<div class="panel">
-			<div class="titulo">Top Uploaders</div>		
+			<div class="titulo">Top Uploaders</div>
 				<div class="ranking" >
 					{% for t in top_subidas %}
 					<div class="usuario_avatar">
@@ -100,7 +100,7 @@
 					</div>
 					{% endfor %}
 				</div>
-			<div class="titulo_descargas">Top Descargas</div>		
+			<div class="titulo_descargas">Top Descargas</div>
 				<div class="ranking_descargas" >
 					{% for d in top_descargas %}
 					<div class="usuario_avatar">
@@ -109,7 +109,7 @@
 					</div>
 					{% endfor %}
 				</div>
-			<div class="titulo_comp">Compañeros</div>		
+			<div class="titulo_comp">Compañeros</div>
 				<div class="comp" >
 					{% for c in compa %}
 					<div class="usuario_avatar">
@@ -122,7 +122,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 		    $("#new_post").hide();
-		    
+
 		    $(".button").click(function(){
 		        $("#new_post").show();
 		        $(".button").hide();
@@ -131,16 +131,16 @@
 		        $("#new_post").hide();
 		    });
 
-			
+
 			$("#filtro").change(function(){
             	$.getJSON('/usuario/posts/filtrar',{
 						filtro: $('#filtro').val() , name: $('#user_name').val(),
 					},function(data){
             $(".muro").html(data.result);
-            
-        
+
+
     			});
-            
+
 			});
 		});
 	</script>

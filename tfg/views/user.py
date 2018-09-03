@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,Flask, render_template, make_response, current_app, redirect, url_for, jsonify, request
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
-from flask import request 
+from flask import request
 from random import randint
 from pymongo import MongoClient
 from time import time
@@ -40,7 +40,7 @@ def required_roles(*roles):
          return f(*args, **kwargs)
       return wrapped
    return wrapper
- 
+
 def get_current_user_role():
    return g.user.role
 
@@ -58,10 +58,10 @@ def hello_world():
 
 
 @user.route('/ident', methods = ["GET"])
-def identificacion():		
+def identificacion():
 	if request.method == 'GET':
 		values = {}
-		return render_template("user/ident.html", vs = values)	
+		return render_template("user/ident.html", vs = values)
 
 @user.route("/logout")
 @login_required
@@ -76,32 +76,31 @@ def logout():
 def protected():
     return Response(response="Hello Protected World!", status=200)
 
-		
+
 @user.route('/registro', methods = ["GET","POST"])
-def registro():		
+def registro():
 	if request.method == 'GET':
 		values = []
-		with Mongo: 
+		with Mongo:
 			facultades = Facultad.find().sort("nombre")
 		for facultad in facultades:
 			values.append(facultad.nombre)
-		return render_template("user/inicio_registro.html", vs = values)	
+		return render_template("user/inicio_registro.html", vs = values)
 
 	if request.method == 'POST':
 		values = []
 		nombre = request.form['facultad']
-		with Mongo: 
+		with Mongo:
 			facultad = Facultad.find_one({Facultad.nombre: nombre })
 			id_facultad = facultad._id
 			titulaciones = Titulacion.find({Titulacion.id_facultad : id_facultad}).sort("nombre")
 		for titulacion in titulaciones:
-			values.append(titulacion.nombre)		
+			values.append(titulacion.nombre)
 		return render_template("user/registro.html", vs = values, facultad = nombre , error = False )
 
-# Número de pedido : 	19344322
 @user.route('/registro/fin', methods = ["POST"])
-def finalizar_registro():	
-	values = []	
+def finalizar_registro():
+	values = []
 	nombre = request.form['facultad']
 	file = request.files['file']
         # if user does not select file, browser also
@@ -114,14 +113,14 @@ def finalizar_registro():
 	usuario = Usuario()
 	usuario.crearUsuario(filename,request.form['nombre'],request.form['password'],request.form['email'],request.form['facultad'],request.form['titulacion'])
 	file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-	with Mongo: 
+	with Mongo:
 		facultad = Facultad.find_one({Facultad.nombre: nombre })
 		id_facultad = facultad._id
 		titulaciones = Titulacion.find({Titulacion.id_facultad : id_facultad})
 		for titulacion in titulaciones:
-			values.append(titulacion.nombre)	
-	
-	with Mongo: 
+			values.append(titulacion.nombre)
+
+	with Mongo:
 		user = Usuario.find_one({Usuario.nombre : usuario.nombre })
 		t = Titulacion.find_one({Titulacion.nombre : request.form['titulacion']})
 		cursos = Curso.find({Curso.id_titulacion:t._id})
@@ -139,13 +138,13 @@ def finalizar_registro():
 				hora.v=""
 				Horario.insert(hora)
 		else:
-			return render_template("registro.html", vs = values, facultad = nombre, error = True )
+			return render_template("user/registro.html", vs = values, facultad = nombre, error = True )
 	user = User(str(usuario._id), usuario.nombre,usuario.role)
 	login_user(user)
-	return render_template("user/inicio.html", usuario = usuario , cursos = cursos , busqueda = False, resultados = resultados)	
+	return render_template("user/inicio.html", usuario = usuario , cursos = cursos , busqueda = False, resultados = resultados)
 
 @user.route('/comp_ident', methods = ["POST"])
-def comprobar_identidad():      
+def comprobar_identidad():
     if request.method == 'POST':
     	logout_user()
         values = {}
@@ -154,44 +153,43 @@ def comprobar_identidad():
         d = datetime.date.today()
         date = d.isoformat()
         with Mongo:
-            #usuario = Usuario.find_one({"nombre" : "Daniel"})
-            usuario = Usuario.find_one({Usuario.nombre : values["nombre"]})
-            if usuario is None:
-                return render_template("user/ident_fallida.html" , motivo = "Nombre de Usuario")
-            else:
-            	if values["password"] == usuario.password and usuario.role == "Admin":
+			usuario = Usuario.find_one({Usuario.nombre : values["nombre"]})
+			if usuario is None:
+				return render_template("user/ident_fallida.html" , motivo = "Nombre de Usuario")
+			else:
+				if values["password"] == usuario.password and usuario.role == "Admin":
 					user = User(str(usuario._id),values["nombre"],usuario.role)
 					login_user(user)
 					return redirect(url_for('admin.admin_inicio',nombre = usuario.nombre))
-                elif values["password"] == usuario.password and usuario.role == "Usuario" and usuario.activo_desde<=date:
-                	Usuario.update({Usuario._id : usuario._id },{'$set': {Usuario.activo: True}})
-                	t = Titulacion.find_one({Titulacion.nombre : usuario.titulacion})
-                	cursos = Curso.find({Curso.id_titulacion:t._id})
-                	user = User( str(usuario._id),values["nombre"],usuario.role)
-                	login_user(user)
-                	resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("fecha",-1).limit(3)
-                	return render_template("user/inicio.html", usuario = usuario, cursos = cursos , busqueda = False, resultados = resultados)   
-                else:              	
-                	return render_template("user/ident_fallida.html", motivo="Password")
+				elif values["password"] == usuario.password and usuario.role == "Usuario" and usuario.activo_desde<=date:
+					Usuario.update({Usuario._id : usuario._id },{'$set': {Usuario.activo: True}})
+					t = Titulacion.find_one({Titulacion.nombre : usuario.titulacion})
+					cursos = Curso.find({Curso.id_titulacion:t._id})
+					user = User( str(usuario._id),values["nombre"],usuario.role)
+					login_user(user)
+					resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("fecha",-1).limit(3)
+					return render_template("user/inicio.html", usuario = usuario, cursos = cursos , busqueda = False, resultados = resultados)
+				else:
+					return render_template("user/ident_fallida.html", motivo="Password")
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DEL USUARIO INICIO                                                         #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @user.route('/usuario/inicio/volver/<string:nombre>', methods = ["GET","POST"])
 @login_required
 @required_roles('Usuario')
 def usuario_volver_inicio(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		f = Facultad.find_one({Facultad.nombre : u.facultad})
 		t = Titulacion.find_one({Titulacion.nombre : u.titulacion},{Titulacion.id_facultad: f._id})
 		cursos = Curso.find({Curso.id_titulacion: t._id})
 		resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("formato",-1).limit(3)
-	
-	return render_template("user/inicio.html", usuario = u, cursos = cursos ,resultados= resultados)  
+
+	return render_template("user/inicio.html", usuario = u, cursos = cursos ,resultados= resultados)
 
 
 
@@ -199,23 +197,23 @@ def usuario_volver_inicio(nombre):
 @user.route('/usuario/inicio/curso/_search', methods = ["GET"])
 @login_required
 @required_roles('Usuario')
-def usuario_busqueda_curso():      
+def usuario_busqueda_curso():
     if request.method == 'GET':
         resultados = []
         curso = request.args.get('busqueda')
         nombre = request.args.get('name')
         with Mongo:
-        	asignaturas = Asignatura.find({Asignatura.id_curso: ObjectId(curso)}).sort("nombre") 
+        	asignaturas = Asignatura.find({Asignatura.id_curso: ObjectId(curso)}).sort("nombre")
         textosalida = ""
         for a in asignaturas:
         	textosalida += '''<a href= /usuario/ver_asignatura/''' +str(a._id)+'''/''' + (nombre).encode('utf-8') + '''  class="button" > '''+ str(a.num_ficheros)+''' &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;''' +  (a.nombre).encode('utf-8') + ''' </a> '''
-        
+
         return jsonify(result=textosalida)
 
 @user.route('/usuario/inicio/nombre/_search', methods = ["GET"])
 @login_required
 @required_roles('Usuario')
-def usuario_busqueda_nombre():      
+def usuario_busqueda_nombre():
     if request.method == 'GET':
         resultados = []
         a = []
@@ -229,25 +227,25 @@ def usuario_busqueda_nombre():
         	for i in c:
         		print i._id
         		a.append(i._id)
-        		asignaturas = Asignatura.find({Asignatura.nombre: {'$regex': asignatura}}).sort("nombre")  
-        for asig in asignaturas:   
+        		asignaturas = Asignatura.find({Asignatura.nombre: {'$regex': asignatura}}).sort("nombre")
+        for asig in asignaturas:
         	for iden in a:
         		if asig.id_curso == iden:
-        			resultados.append(asig)  
+        			resultados.append(asig)
         textosalida = ""
         for a in resultados:
         	textosalida += '''<a href= /usuario/ver_asignatura/''' +str(a._id)+'''/''' + (nombre).encode('utf-8') + '''  class="button" > '''+ str(a.num_ficheros)+''' &nbsp;&nbsp;<i class="fa fa-file-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;''' +  (a.nombre).encode('utf-8') + ''' </a> '''
-        
+
         return jsonify(result=textosalida)
 
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DEL USUARIO ASIGNATURAS Y ARCHIVOS                                         #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
-                
+
 @user.route('/usuario/ver_asignatura/<asignatura>/<string:usuario>',methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
@@ -255,18 +253,15 @@ def ver_asignatura(asignatura, usuario):
 	with Mongo:
 		a = Asignatura.find_one({Asignatura._id: ObjectId(asignatura)})
 		u = Usuario.find_one({Usuario.nombre : usuario })
-		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso 
-		#es la correspondiente a la titulacion asociada.
-					
 		archivos = Archivo.find({Archivo.id_asignatura : a._id })
 
 	resultados= []
 	tipos = ["Apuntes","Examenes","Ejercicios"]
 	for archivo in archivos:
 		if archivo.autorizado == True:
-			resultados.append(archivo) 
+			resultados.append(archivo)
 
-	return render_template("user/ver_asignatura.html", asignatura = a, resultados = resultados, usuario = u, tipos = tipos) 
+	return render_template("user/ver_asignatura.html", asignatura = a, resultados = resultados, usuario = u, tipos = tipos)
 
 
 @user.route('/usuario/ver_archivo/<string:archivo>/<string:usuario>',methods=['GET', 'POST'])
@@ -274,11 +269,6 @@ def ver_asignatura(asignatura, usuario):
 @required_roles('Usuario')
 def ver_archivo(archivo, usuario):
 	with Mongo:
-		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso 
-		#es la correspondiente a la titulacion asociada.
-
-		
-
 		archivo = Archivo.find_one({Archivo.nombre : archivo })
 		autor = Usuario.find_one({Usuario.nombre: archivo.autor})
 		comentarios = Comentario.find({Comentario.id_archivo : archivo._id })
@@ -286,7 +276,7 @@ def ver_archivo(archivo, usuario):
 		comments = Comments(archivo._id)
 		for comentario in comentarios:
 			comments.append(comentario)
-		
+
 		first_page = []
 		pagina = 0
 		n = 0
@@ -297,16 +287,16 @@ def ver_archivo(archivo, usuario):
 			pagina = 0
 
 		comments.clear()  # Remove all entries
-    	
 
-	return render_template("user/ver_archivo.html",  autor=autor ,archivo = archivo,  usuario = u, comentarios = first_page, pagina = pagina, paginas = n) 
+
+	return render_template("user/ver_archivo.html",  autor=autor ,archivo = archivo,  usuario = u, comentarios = first_page, pagina = pagina, paginas = n)
 
 @user.route('/usuario/ver_archivo2/<string:archivo>/<string:usuario>/<int:pagina>',methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
 def ver_archivo2(archivo, usuario, pagina):
 	with Mongo:
-		
+
 		archivo = Archivo.find_one({Archivo.nombre : archivo })
 		autor = Usuario.find_one({Usuario.nombre: archivo.autor})
 		comentarios = Comentario.find({Comentario.id_archivo : archivo._id })
@@ -314,8 +304,8 @@ def ver_archivo2(archivo, usuario, pagina):
 		comments = Comments(archivo._id)
 		for comentario in comentarios:
 			comments.append(comentario)
-		
-		
+
+
 		n = comments.pages() - 1   # Return the current number of pages
 		print(n)
 		#print(comments.length())  # Return the current number of entries
@@ -324,9 +314,9 @@ def ver_archivo2(archivo, usuario, pagina):
 		first_page = comments[pagina]
 
 		comments.clear()  # Remove all entries
-    	
 
-	return render_template("user/ver_archivo.html",  autor=autor ,archivo = archivo,  usuario = u, comentarios = first_page , pagina = pagina, paginas = n) 
+
+	return render_template("user/ver_archivo.html",  autor=autor ,archivo = archivo,  usuario = u, comentarios = first_page , pagina = pagina, paginas = n)
 
 
 @user.route('/usuario/puntuar_archivo/<int:voto>/<string:archivo>/<string:usuario>',methods=['GET', 'POST'])
@@ -352,7 +342,7 @@ def puntuar_archivo(voto,archivo, usuario):
 		comments = Comments(a._id)
 		for comentario in comentarios:
 			comments.append(comentario)
-		
+
 		first_page = []
 		pagina = 0
 		n = 0
@@ -366,7 +356,7 @@ def puntuar_archivo(voto,archivo, usuario):
 		archivo = Archivo.find_one({Archivo.nombre : archivo })
 		u = Usuario.find_one({Usuario.nombre : usuario })
 
-	return render_template("user/ver_archivo.html",  autor=autor ,  archivo = archivo,  usuario = u, comentarios = first_page , pagina = pagina, paginas = n) 
+	return render_template("user/ver_archivo.html",  autor=autor ,  archivo = archivo,  usuario = u, comentarios = first_page , pagina = pagina, paginas = n)
 
 
 @user.route('/usuario/comentar_archivo/<string:archivo>/<string:usuario>',methods=['GET', 'POST'])
@@ -374,14 +364,14 @@ def puntuar_archivo(voto,archivo, usuario):
 @required_roles('Usuario')
 def comment_file(archivo, usuario):
 	with Mongo:
-		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso 
+		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso
 		#es la correspondiente a la titulacion asociada.
 
 		archivo = Archivo.find_one({Archivo.nombre : archivo })
 		u = Usuario.find_one({Usuario.nombre : usuario })
-	
 
-	return render_template("user/crear_comentario.html", archivo = archivo,  usuario = u) 
+
+	return render_template("user/crear_comentario.html", archivo = archivo,  usuario = u)
 
 
 
@@ -401,12 +391,12 @@ def end_comment():
 		comentario.unlike = 0
 		comentario.denuncia = False
 		with Mongo:
-		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso 
+		#Aqui habria que comprobar que la asignatura no solo tiene el nombre adecuado si no que la id_curso
 		#es la correspondiente a la titulacion asociada.
 			usuario = Usuario.find_one({Usuario.nombre : request.form['nombre'] })
 			n = usuario.comentarios + 1
 			Usuario.update({Usuario.nombre : request.form['nombre']},{'$set': {Usuario.comentarios:  n }})
-			autor = Usuario.find_one({Usuario.nombre:  request.form['nombre']}) 
+			autor = Usuario.find_one({Usuario.nombre:  request.form['nombre']})
 			comentario.autor_avatar = autor.foto
 			archivo = Archivo.find_one({Archivo.nombre : request.form['archivo']})
 			n = archivo.num_comen + 1
@@ -417,7 +407,7 @@ def end_comment():
 			comments = Comments(archivo._id)
 			for comentario in comentarios:
 				comments.append(comentario)
-			
+
 			first_page = []
 			pagina = 0
 			n = 0
@@ -429,35 +419,55 @@ def end_comment():
 
 			comments.clear()  # Remove all entries
 			u = Usuario.find_one({Usuario.nombre : request.form['nombre'] })
-	
 
-	return redirect(url_for('.ver_archivo',  archivo=archivo.nombre , usuario = usuario.nombre))
+
+	return redirect(url_for('.ver_archivo', _anchor='exactlocation',  archivo=archivo.nombre , usuario = usuario.nombre))
 
 
 @user.route('/usuario/valorar_comentario/<int:valor>/<comentario>/<string:archivo>/<string:usuario>' ,methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
 def value_comment(valor,comentario,archivo,usuario):
-	
+
 	if valor==1:
 		with Mongo:
 			c = Comentario.find_one({Comentario._id : ObjectId(comentario)})
-			likes = c.likes + 1
-			Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.likes:  likes }})
-			
+			votos = c.votos
+			if votos.has_key(usuario):
+				if votos[usuario] == 0:
+					unlikes = int(c.unlike) - 1
+					likes = int(c.likes) + 1
+					votos[usuario] = 1
+					Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.likes:  likes, Comentario.unlike:  unlikes, Comentario.votos:  votos }})
+			else:
+				likes = int(c.likes) + 1
+				votos[usuario] = 1
+				Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.likes:  likes, Comentario.votos:  votos }})
+
 	else:
 		with Mongo:
-			c = Comentario.find_one({Comentario._id :ObjectId(comentario) })
-			unlikes = c.unlike + 1
-			Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.unlike:  unlikes }})
-			
-	return redirect(url_for('.ver_archivo',  archivo=archivo , usuario = usuario))
+			c = Comentario.find_one({Post._id : ObjectId(comentario)})
+			votos = c.votos
+			if votos.has_key(usuario):
+				if votos[usuario] == 1:
+					unlikes = int(c.unlike) + 1
+					likes = int(c.likes) - 1
+					votos[usuario] = 0
+					Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.likes:  likes, Comentario.unlike:  unlikes, Comentario.votos:  votos }})
+			else:
+				unlikes = int(c.unlike) + 1
+				votos[usuario] = 0
+				Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.unlike:  unlikes, Comentario.votos:  votos }})
+
+	return redirect(url_for('.ver_archivo', _anchor='exactlocation',  archivo=archivo , usuario = usuario))
 
 @user.route('/usuario/comentarios/denuncias/<comentario>/<string:archivo>/<string:usuario>', methods = ["GET"])
+@login_required
+@required_roles('Usuario')
 def usuario_comentarios_denuncias(comentario,archivo,usuario):
 	with Mongo:
 		Comentario.update({Comentario._id: ObjectId(comentario)},{'$set': {Comentario.denuncia:  True }})
-		
+
 	return redirect(url_for('.ver_archivo',  archivo=archivo , usuario = usuario))
 
 
@@ -487,7 +497,7 @@ def upload_file():
             with Mongo:
             	u = Usuario.find_one({Usuario.nombre: usuario})
             	num= u.archivos_subidos + 1
-            	
+
             	a = Asignatura.find_one({Asignatura.nombre : asignatura})
             	curso = Curso.find_one({Curso._id : a.id_curso})
             	id_asignatura = a._id
@@ -502,7 +512,7 @@ def upload_file():
             	archivo.num_descargas = 0
             	archivo.num_votos = 0
             	archivo.suma_valor = 0
-            	archivo.valor_entero = 0 
+            	archivo.valor_entero = 0
             	archivo.valor_dec = 0
             	archivo.num_comen = 0
             	archivo.asignatura = a.nombre
@@ -512,15 +522,15 @@ def upload_file():
             	f = dia.strftime("%y/%m/%d")
             	archivo.fecha = d
             	archivo.formato = f
-            	numero = a.num_ficheros + 1 
+            	numero = a.num_ficheros + 1
 
-            	
-            	
+
+
             	for i in range(len(a.nombre_ficheros)):
             		archivos.append(a.nombre_ficheros[i])
 
             	arc = Archivo.find_one({Archivo.nombre : filename})
-            	
+
             	archivos.append(filename)
             	if arc == None:
             		Archivo.insert(archivo)
@@ -556,20 +566,20 @@ def uploaded_file(filename, usuario):
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DEL USUARIO PERFIL                                                         #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @user.route('/usuario/perfil/<string:nombre>',methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
 def perfil(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		facultad = Facultad.find_one({Facultad.nombre : u.facultad})
 		titul = Titulacion.find({Titulacion.id_facultad : facultad._id}).sort("nombre")
 		facul = Facultad.find()
 
-	return render_template("user/perfil.html", usuario = u, titul = titul, facul = facul )	
+	return render_template("user/perfil.html", usuario = u, titul = titul, facul = facul )
 
 @user.route('/usuario/perfil/cargar_imagen', methods=['POST'])
 @login_required
@@ -591,13 +601,15 @@ def upload_image():
             filename = secure_filename(file.filename)
             with Mongo:
             	Usuario.update({Usuario.nombre : usuario },{'$set': {Usuario.foto: filename}})
-            	
+
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('.perfil', nombre=usuario))
 
 
 
 @user.route('/usuario/perfil/_search')
+@login_required
+@required_roles('Usuario')
 def search():
 	with Mongo:
 		facultad = Facultad.find_one({Facultad.nombre : request.args.get('busqueda')})
@@ -608,50 +620,60 @@ def search():
 	return jsonify(result=textosalida)
 
 @user.route('/usuario/perfil/cambiar_facultad')
+@login_required
+@required_roles('Usuario')
 def perfil_nueva_facul():
 	nombre = request.args.get('nombre')
 	with Mongo:
-		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.facultad: request.args.get('nueva_facultad')}})		
-		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.titulacion: request.args.get('nueva_titulacion')}})		
+		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.facultad: request.args.get('nueva_facultad')}})
+		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.titulacion: request.args.get('nueva_titulacion')}})
 
 	textosalida = ''''''
 	return jsonify(result=textosalida)
 
 @user.route('/usuario/perfil/cambiar_titulacion')
+@login_required
+@required_roles('Usuario')
 def perfil_nueva_titul():
 	nombre = request.args.get('nombre')
 	with Mongo:
-		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.titulacion: request.args.get('nueva_titulacion')}})		
+		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.titulacion: request.args.get('nueva_titulacion')}})
 
 	textosalida = ''''''
 	return jsonify(result=textosalida)
 
 
 @user.route('/usuario/perfil/cambiar_mail')
+@login_required
+@required_roles('Usuario')
 def perfil_nuevo_mail():
 	nombre = request.args.get('nombre')
 	with Mongo:
-		Usuario.update({Usuario.nombre : nombre },{'$set': {Usuario.email: request.args.get('nuevo_mail')}})		
+		Usuario.update({Usuario.nombre : nombre },{'$set': {Usuario.email: request.args.get('nuevo_mail')}})
 	textosalida = '''<b>Email >> </b>'''+request.args.get('nuevo_mail')+'''<button id="usuario_email"   class="button" > Editar </button>'''
 	return jsonify(result=textosalida)
 
 @user.route('/usuario/perfil/cambiar_password')
+@login_required
+@required_roles('Usuario')
 def perfil_nuevo_pass():
 	nombre = request.args.get('nombre')
 	with Mongo:
-		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.password: request.args.get('nuevo_pass')}})		
+		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.password: request.args.get('nuevo_pass')}})
 
 	textosalida = '''<b>Password >> </b>'''+request.args.get('nuevo_pass')+'''<button id="usuario_password"   class="button" > Editar </button>'''
 	return jsonify(result=textosalida)
 
 @user.route('/usuario/perfil/finalizar_mensaje')
+@login_required
+@required_roles('Usuario')
 def escribir_mensaje_perfil():
 
 	autor = request.args.get('autor')
 	destinatario = request.args.get('destino')
 	asunto = request.args.get('asunto')
 	body = request.args.get('body')
-	with Mongo: 
+	with Mongo:
 		mensaje = Mensaje()
 		mensaje2 = Mensaje()
 		compa  = Usuario.find_one({Usuario.nombre : destinatario})
@@ -681,15 +703,19 @@ def escribir_mensaje_perfil():
 	return jsonify(result="textosalida")
 
 @user.route('/usuario/perfil/mensajes/denuncias', methods = ["GET"])
+@login_required
+@required_roles('Usuario')
 def usuario_perfil_denuncias():
 	print("Aqui estoy")
 	mensaje = request.args.get('busqueda')
 	with Mongo:
 		Mensaje.update({Mensaje._id: ObjectId(mensaje)},{'$set': {Mensaje.denuncia: True }})
-		
+
 	return jsonify(result="textosalida")
 
 @user.route('/usuario/perfil/mensajes/obtener')
+@login_required
+@required_roles('Usuario')
 def perfil_mensajes():
 	estado = request.args.get('busqueda')
 	nombre = request.args.get('nombre')
@@ -697,8 +723,8 @@ def perfil_mensajes():
 		u = Usuario.find_one({Usuario.nombre: nombre})
 		if estado == "Enviados":
 			mensajes = Mensaje.find({Mensaje.autor : nombre, Mensaje.estado :estado})
-		else:	
-			mensajes = Mensaje.find({Mensaje.id_usuario : u._id, Mensaje.estado :estado})		
+		else:
+			mensajes = Mensaje.find({Mensaje.id_usuario : u._id, Mensaje.estado :estado})
 	textosalida = ""
 	for b in mensajes:
 		if b.estado == "Enviados":
@@ -713,35 +739,35 @@ def perfil_mensajes():
 @login_required
 @required_roles('Usuario')
 def usuario_mensajes(nombre):
-	with Mongo: 
-		u  = Usuario.find_one({Usuario.nombre : nombre})		
+	with Mongo:
+		u  = Usuario.find_one({Usuario.nombre : nombre})
 		mensajes = Mensaje.find({Mensaje.id_usuario : u._id, Mensaje.estado :"No Leídos"})
-		
-	return render_template("user/mensajes.html", usuario = u, buzon=mensajes)	
+
+	return render_template("user/mensajes.html", usuario = u, buzon=mensajes)
 
 @user.route('/usuario/perfil/mensajes/leer/<string:nombre>/<string:mensaje>',methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
 def usuario_leer_mensajes(nombre, mensaje):
 	destino = {}
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
-		m = Mensaje.find_one({Mensaje._id: ObjectId(mensaje)})	
+		m = Mensaje.find_one({Mensaje._id: ObjectId(mensaje)})
 		if m.estado.encode('utf-8') == "No Leídos":
 			enlace = "#no_leidos"
-			Mensaje.update({Mensaje._id:ObjectId(mensaje)},{'$set': { Mensaje.estado: "Leídos"}})	
+			Mensaje.update({Mensaje._id:ObjectId(mensaje)},{'$set': { Mensaje.estado: "Leídos"}})
 			Usuario.update({Usuario._id:u._id},{'$set': { Usuario.no_leidos: u.no_leidos - 1 }})
 		elif m.estado.encode('utf-8') == "Leídos":
 			enlace = "#leidos"
 		else:
 			enlace = "#enviados"
 			destino = Usuario.find_one({Usuario._id : ObjectId(m.id_usuario)})
-	return render_template("user/ver_mensaje.html", usuario = u, mensaje=m, enlace=enlace, destino = destino)	
+	return render_template("user/ver_mensaje.html", usuario = u, mensaje=m, enlace=enlace, destino = destino)
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DE ANOTACIONES                                                             #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 
@@ -751,56 +777,58 @@ def usuario_leer_mensajes(nombre, mensaje):
 @login_required
 @required_roles('Usuario')
 def usuario_anotaciones(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		notas = Notas.find({Notas.autor : nombre}).sort("formato")
-		
+
 
 	busqueda = False
 	filtro = ""
-	
 
-	return render_template("user/anotaciones.html", usuario = u,  notas = notas, busqueda = busqueda, filtro = filtro)  
+
+	return render_template("user/anotaciones.html", usuario = u,  notas = notas, busqueda = busqueda, filtro = filtro)
 
 @user.route('/usuario/anotaciones/filtro/<string:nombre>/<string:filtro>', methods = ["GET","POST"])
 @login_required
 @required_roles('Usuario')
 def usuario_anotaciones_filtro(nombre, filtro):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		notas = Notas.find({Notas.autor : nombre}).sort("formato")
-		
+
 
 	busqueda = True
-	
 
-	return render_template("user/anotaciones.html", usuario = u,  notas = notas, busqueda = busqueda, filtro = filtro)  
+
+	return render_template("user/anotaciones.html", usuario = u,  notas = notas, busqueda = busqueda, filtro = filtro)
 
 @user.route('/usuario/anotaciones/crear_nota/<string:nombre>', methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def crear_nota(nombre):
 
 
 	if request.method == 'GET':
-		with Mongo: 
-			 
+		with Mongo:
+
 			u  = Usuario.find_one({Usuario.nombre : nombre})
 			f = Facultad.find_one({Facultad.nombre : u.facultad})
 			for titulacion in f.titulaciones:
 				if titulacion == u.titulacion:
 					t = Titulacion.find_one({Titulacion.nombre : titulacion})
 
-	cursos = t.num_cursos 
+	cursos = t.num_cursos
 
-	return render_template("user/crear_nota.html", usuario = u)  	
-  
+	return render_template("user/crear_nota.html", usuario = u)
+
 
 @user.route('/usuario/anotaciones/finalizar_nota', methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def finalizar_nota():
 
 	if request.method == 'POST':
-		with Mongo: 
+		with Mongo:
 			u  = Usuario.find_one({Usuario.nombre : request.form['nombre']})
 			notas = Notas.find({Notas.autor : request.form['nombre']}).sort("formato")
 			f = Facultad.find_one({Facultad.nombre : u.facultad})
@@ -821,9 +849,9 @@ def finalizar_nota():
 			nota.autor = request.form['nombre']
 			Notas.insert(nota)
 
-		cursos = t.num_cursos 		
-	
-		return render_template("user/anotaciones.html", usuario = u, cursos = cursos , notas = notas)  
+		cursos = t.num_cursos
+
+		return render_template("user/anotaciones.html", usuario = u, cursos = cursos , notas = notas)
 
 
 
@@ -834,8 +862,8 @@ def ver_nota(nombre, nota):
 	with Mongo:
 		nota = Notas.find_one({Notas._id: ObjectId(nota)})
 		u = Usuario.find_one({Usuario.nombre : nombre })
-		
-	return render_template("user/ver_nota.html", usuario = u, nota = nota) 
+
+	return render_template("user/ver_nota.html", usuario = u, nota = nota)
 
 
 @user.route('/usuario/anotaciones/borrar_nota/<nombre>/<nota>',methods=['GET', 'POST'])
@@ -850,24 +878,24 @@ def borrar_nota(nombre, nota):
 		for titulacion in f.titulaciones:
 			if titulacion == u.titulacion:
 				t = Titulacion.find_one({Titulacion.nombre : titulacion})
-		
 
-		cursos = t.num_cursos 	 
-			
 
-	return render_template("user/anotaciones.html", usuario = u, cursos = cursos , notas = notas) 
+		cursos = t.num_cursos
+
+
+	return render_template("user/anotaciones.html", usuario = u, cursos = cursos , notas = notas)
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DE COMUNIDAD                                                               #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @user.route('/usuario/comunidad/<string:nombre>', methods = ["GET","POST"])
 @login_required
 @required_roles('Usuario')
 def usuario_comunidad(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		f = Facultad.find_one({Facultad.nombre : u.facultad})
 		top_subidas = Usuario.find({Usuario.titulacion: u.titulacion}).sort("archivos_subidos",-1).limit(5)
@@ -878,22 +906,22 @@ def usuario_comunidad(nombre):
 				t = Titulacion.find_one({Titulacion.nombre : titulacion})
 		posts = Post.find({Post.id_titulacion: t._id}).sort("_id",-1)
 
-	return render_template("user/comunidad.html", usuario = u,  posts = posts, titulacion = t._id, top_subidas= top_subidas , compa=compa, top_descargas= top_descargas)  
+	return render_template("user/comunidad.html", usuario = u,  posts = posts, titulacion = t._id, top_subidas= top_subidas , compa=compa, top_descargas= top_descargas)
 
 @user.route('/usuario/posts/filtrar', methods = ["GET"])
 @login_required
 @required_roles('Usuario')
-def usuario_comunidad_filtrar():      
+def usuario_comunidad_filtrar():
     if request.method == 'GET':
         resultados = []
         filtro = request.args.get('filtro')
         nombre = request.args.get('name')
         print(filtro)
         with Mongo:
-        	posts = Post.find({Post.tema: filtro}).sort("_id",-1) 
+        	posts = Post.find({Post.tema: filtro}).sort("_id",-1)
         textosalida = ""
         for post in posts:
-      
+
         	textosalida += '''<div class="post">
   						<div class="titulo_post">
   							<a  href=/usuario/ver_comp/'''+nombre.encode('utf-8') +'''/'''+post.autor.encode('utf-8') +'''     title='''+post.autor.encode('utf-8')+''' ><img style="margin: 4px 4px 2px 4px;" class="avatar_post" tittle=post.autor src="/static/'''+post.autor_avatar.encode('utf-8')+'''" /></a>
@@ -910,74 +938,97 @@ def usuario_comunidad_filtrar():
 	  							<a href=/usuario/comunidad/valorar_post/1/'''+str(post._id) +'''/'''+nombre.encode('utf-8') +'''   class="like" title="Denunciar"><i class="fa fa-ban fa-lg" aria-hidden="true"></i></a>
 	  						</div>
   						</div>
-  						
-  						
+
+
   					</div>'''
-        
+
         return jsonify(result=textosalida)
 
-@user.route('/usuario/comunidad/valorar_post/<int:valor>/<post>//<string:usuario>' ,methods=['GET', 'POST'])
+@user.route('/usuario/comunidad/valorar_post/<int:valor>/<post>/<string:usuario>' ,methods=['GET', 'POST'])
 @login_required
 @required_roles('Usuario')
 def value_post(valor,post,usuario):
-	
+
 	if valor==1:
 		with Mongo:
 			c = Post.find_one({Post._id : ObjectId(post)})
-			likes = int(c.likes) + 1
-			Post.update({Post._id: ObjectId(post)},{'$set': {Post.likes:  likes }})
-			
+			votos = c.votos
+			if votos.has_key(usuario):
+				if votos[usuario] == 0:
+					unlikes = int(c.unlikes) - 1
+					likes = int(c.likes) + 1
+					votos[usuario] = 1
+					Post.update({Post._id: ObjectId(post)},{'$set': {Post.likes:  likes, Post.unlikes:  unlikes, Post.votos:  votos }})
+			else:
+				likes = int(c.likes) + 1
+				votos[usuario] = 1
+				Post.update({Post._id: ObjectId(post)},{'$set': {Post.likes:  likes, Post.votos:  votos }})
+
 	else:
 		with Mongo:
 			c = Post.find_one({Post._id : ObjectId(post)})
-			unlikes = int(c.unlikes) + 1
-			Post.update({Post._id: ObjectId(post)},{'$set': {Post.unlikes:  unlikes }})
-			
+			votos = c.votos
+			if votos.has_key(usuario):
+				if votos[usuario] == 1:
+					unlikes = int(c.unlikes) + 1
+					likes = int(c.likes) - 1
+					votos[usuario] = 0
+					Post.update({Post._id: ObjectId(post)},{'$set': {Post.likes:  likes, Post.unlikes:  unlikes, Post.votos:  votos }})
+			else:
+				unlikes = int(c.unlikes) + 1
+				votos[usuario] = 0
+				Post.update({Post._id: ObjectId(post)},{'$set': {Post.unlikes:  unlikes, Post.votos:  votos }})
+
 	return redirect(url_for('.usuario_comunidad', nombre = usuario))
 
 @user.route('/usuario/comunidad/denuncias/<string:nombre>/<string:post>', methods = ["GET"])
+@login_required
+@required_roles('Usuario')
 def usuario_comunidad_denuncias(nombre,post):
 	with Mongo:
 		Post.update({Post._id: ObjectId(post)},{'$set': {Post.denuncia: True }})
-		
+
 	return redirect(url_for('.usuario_comunidad', nombre = nombre))
 
 
 @user.route('/usuario/ver_comp/<string:usuario>/<string:nombre>' , methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def ver_comp(usuario,nombre):
 
 
 	if request.method == 'GET':
-		with Mongo: 
-			 
+		with Mongo:
+
 			compa  = Usuario.find_one({Usuario.nombre : nombre})
 			u = Usuario.find_one({Usuario.nombre : usuario})
 		if nombre == usuario:
 			return redirect(url_for('.perfil', nombre=usuario))
-		else:	 
-			return render_template("user/ver_usuario.html", usuario = u, compa= compa)  	
+		else:
+			return render_template("user/ver_usuario.html", usuario = u, compa= compa)
 
 @user.route('/usuario/comunidad/crear_post/<string:nombre>/<string:titulacion>' , methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def crear_post(nombre,titulacion):
 
 
 	if request.method == 'GET':
-		with Mongo: 
-			 
-			u  = Usuario.find_one({Usuario.nombre : nombre})
-			 
+		with Mongo:
 
-	return render_template("user/crear_post.html", usuario = u, titulacion = titulacion )  	
-  
+			u  = Usuario.find_one({Usuario.nombre : nombre})
+
+
+	return render_template("user/crear_post.html", usuario = u, titulacion = titulacion )
+
 
 @user.route('/usuario/comunidad/finalizar_post', methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def finalizar_post():
 
 	if request.method == 'POST':
-		with Mongo: 
+		with Mongo:
 			post = Post()
 			u  = Usuario.find_one({Usuario.nombre : request.form['nombre']})
 			post.likes = 0
@@ -1001,15 +1052,16 @@ def finalizar_post():
 			top_descargas = Usuario.find({Usuario.titulacion: u.titulacion}).sort("descargas",-1).limit(5)
 			compa = Usuario.find({Usuario.titulacion: u.titulacion})
 
- 
-		return render_template("user/comunidad.html", usuario = u,  posts = posts, titulacion = titul._id, top_subidas= top_subidas , compa=compa, top_descargas= top_descargas)  
+
+		return render_template("user/comunidad.html", usuario = u,  posts = posts, titulacion = titul._id, top_subidas= top_subidas , compa=compa, top_descargas= top_descargas)
 
 @user.route('/usuario/comunidad/escribir_mensaje', methods = ["GET","POST"])
 @login_required
+@required_roles('Usuario')
 def escribir_mensaje():
 
 	if request.method == 'POST':
-		with Mongo: 
+		with Mongo:
 			mensaje = Mensaje()
 			mensaje2 = Mensaje()
 			compa  = Usuario.find_one({Usuario.nombre : request.form['usuario']})
@@ -1035,14 +1087,14 @@ def escribir_mensaje():
 			mensaje2.estado = "Enviados"
 			Mensaje.insert(mensaje)
 			Mensaje.insert(mensaje2)
- 
-		return render_template("user/ver_usuario.html", usuario = autor, compa= compa)  
+
+		return render_template("user/ver_usuario.html", usuario = autor, compa= compa)
 
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DE ENLACES                                                                 #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 
@@ -1050,20 +1102,20 @@ def escribir_mensaje():
 @login_required
 @required_roles('Usuario')
 def usuario_enlaces(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		f = Facultad.find_one({Facultad.nombre : u.facultad})
 		for titulacion in f.titulaciones:
 			if titulacion == u.titulacion:
 				t = Titulacion.find_one({Titulacion.nombre : titulacion})
-		posts = Post.find({Post.id_titulacion: t._id})
+		enlaces = Enlaces.find({Enlaces.id_titulacion: t._id})
 
-	return render_template("user/enlaces.html", usuario = u,  posts = posts, titulacion = t._id) 
+	return render_template("user/enlaces.html", usuario = u, titulacion = t._id, enlaces=enlaces)
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DE HORARIO                                                                 #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 
@@ -1071,8 +1123,8 @@ def usuario_enlaces(nombre):
 @login_required
 @required_roles('Usuario')
 def usuario_horario(nombre):
-	with Mongo: 
-		u  = Usuario.find_one({Usuario.nombre : nombre}) 
+	with Mongo:
+		u  = Usuario.find_one({Usuario.nombre : nombre})
 		asignaturas = u.horario.keys()
 		asig = []
 		for a in asignaturas:
@@ -1089,9 +1141,9 @@ def usuario_horario(nombre):
 			Horario.insert(hora)'''
 		horas_ma = Horario.find({Horario.id_usuario: u._id}).sort("hora").limit(6)
 		horas_tarde = Horario.find({Horario.id_usuario: u._id}).sort("hora").skip(6)
-		
 
-	return render_template("user/horario.html", usuario = u,  horas_ma=horas_ma, horas_tarde=horas_tarde, asig=asig) 
+
+	return render_template("user/horario.html", usuario = u,  horas_ma=horas_ma, horas_tarde=horas_tarde, asig=asig)
 
 
 @user.route('/usuario/horario/agregar', methods = ["GET","POST"])
@@ -1100,12 +1152,12 @@ def usuario_horario(nombre):
 def usuario_horario_agregar():
 	if request.method == 'POST':
 		client = MongoClient('localhost', 27017)
-		db = client.trabajofingrado	
-		with Mongo: 
-			u  = Usuario.find_one({Usuario.nombre : request.form['usuario']}) 
+		db = client.trabajofingrado
+		with Mongo:
+			u  = Usuario.find_one({Usuario.nombre : request.form['usuario']})
 			collection = db.usuarios
 			nombre = request.form['name']
-			numero_horas = int(request.form['horas'])	
+			numero_horas = int(request.form['horas'])
 			h = u.horario
 			#horario= { "MD": { "9": "l", "10": "m"}}
 			h[nombre]={}
@@ -1122,7 +1174,7 @@ def usuario_horario_agregar():
 			for i in range(1,numero_horas + 1):
 				indice = str(i)
 				hora = int(request.form['hora'+indice])
-				dia = request.form['dia'+indice].encode('utf-8')			
+				dia = request.form['dia'+indice].encode('utf-8')
 
 				if dia=="Lunes":
 					Horario.update({Horario.id_usuario: u._id,Horario.hora: hora},{'$set': {Horario.l: nombre }})
@@ -1140,9 +1192,9 @@ def usuario_horario_agregar():
 				asig.append(a)
 			horas_ma = Horario.find({Horario.id_usuario: u._id}).sort("hora").limit(6)
 			horas_tarde = Horario.find({Horario.id_usuario: u._id}).sort("hora").skip(6)
-			
 
-		return render_template("user/horario.html", usuario = u, horas_ma=horas_ma, horas_tarde=horas_tarde,asig=asig) 
+
+		return render_template("user/horario.html", usuario = u, horas_ma=horas_ma, horas_tarde=horas_tarde,asig=asig)
 
 @user.route('/usuario/horario/eliminar', methods = ["GET","POST"])
 @login_required
@@ -1152,23 +1204,20 @@ def usuario_horario_eliminar():
 		client = MongoClient('localhost', 27017)
 		db = client.trabajofingrado
 		collection = db.usuarios
-		with Mongo: 
-			u  = Usuario.find_one({Usuario.nombre : request.form['usuario']}) 
+		with Mongo:
+			u  = Usuario.find_one({Usuario.nombre : request.form['usuario']})
 			nombre = request.form['asignatura']
 			horario = u.horario
 			horas = horario[nombre]
+			s3='Miércoles'.decode('utf-8')
 			for hora in horas:
 				for d in horario[nombre][hora]:
 					hora = int(hora)
 					if d=="Lunes":
-						print(d)
-						print(hora)
 						Horario.update({Horario.id_usuario: u._id,Horario.hora: hora},{'$set': {Horario.l: "" }})
 					elif d=="Martes":
-						print(d)
-						print(hora)
 						Horario.update({Horario.id_usuario: u._id,Horario.hora: hora},{'$set': {Horario.m: "" }})
-					elif d=="Miércoles":
+					elif d==s3:
 						Horario.update({Horario.id_usuario: u._id,Horario.hora: hora},{'$set': {Horario.x: "" }})
 					elif d=="Jueves":
 						Horario.update({Horario.id_usuario: u._id,Horario.hora: hora},{'$set': {Horario.j: "" }})
@@ -1182,6 +1231,6 @@ def usuario_horario_eliminar():
 				asig.append(a)
 			horas_ma = Horario.find({Horario.id_usuario: u._id}).sort("hora").limit(6)
 			horas_tarde = Horario.find({Horario.id_usuario: u._id}).sort("hora").skip(6)
-			
 
-		return render_template("user/horario.html", usuario = u, horas_ma=horas_ma, horas_tarde=horas_tarde,asig=asig) 
+
+		return render_template("user/horario.html", usuario = u, horas_ma=horas_ma, horas_tarde=horas_tarde,asig=asig)

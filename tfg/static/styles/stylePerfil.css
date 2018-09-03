@@ -3,7 +3,7 @@
 
 html {
 
-  
+
     }
 
 body{
@@ -30,25 +30,48 @@ $align:center;
   -ms-transition:1s ease;
   transition:1s ease;
 }
+
+.back{
+  height: 25px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 30px;
+  padding-left: 30px;
+  position: absolute;
+  top:17.5%;
+  left:85.5%;
+  background-color:#198F67;
+  color:rgb(255,255,255);
+  text-decoration: none;
+  text-transform: uppercase;
+  font:  15px Oswald;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
 .link_correo{
 
-  margin-left: 80px;  
-  font: 15px Oswald; 
-  color: #006400; 
+  margin-left: 80px;
+  font: 15px Oswald;
+  color: #006400;
   text-decoration:none;
 }
 .correo{
 
 
-  padding-top: 15px; 
-  padding-bottom: 15px; 
+  padding-top: 15px;
+  padding-bottom: 15px;
   background-color:#FFFAFA;
 }
 .correo:hover{
    background-color: #F5F5F5;
 
-} 
-  
+}
+
 .button:hover {
           color: #0b76a6;
         }
@@ -63,7 +86,7 @@ $align:center;
   background: white;
   color:#198F67;
   text-decoration: none;
- 
+
   font:  18px Oswald;
   text-align: center;
   left: 400px;
@@ -72,7 +95,7 @@ $align:center;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   text-shadow:0px 1px 0px rgba(0,0,0,0.5);
-  outline:none; 
+  outline:none;
   border-style: none;
 }
 .buzon {
@@ -103,7 +126,7 @@ $align:center;
   width: 150px;
 
   padding: 30px 5px 2px 5px;
-  
+
   background-color:#198F67;
   color:rgb(255,255,255);
   text-decoration: none;
@@ -132,26 +155,26 @@ $align:center;
 
 
 .enlace:hover{
-  
+
   color : red;
-  
+
 }
 .menu_usuario{
-  
+
   font:20px Oswald;
   text-align: center;
   border-bottom-style: solid;
   border-bottom-color: #00FF00;
 }
 .menu_usuario a{
-  
+
   color : #696969;
-  
+
 }
 
-ul.usuario li 
+ul.usuario li
 {
-  
+
    width:280px;
 }
    ul.usuario {
@@ -160,12 +183,12 @@ ul.usuario li
     list-style: none;
     padding-right: 20px;
   }
-  
+
      ul.usuario li {
       display: inline-block;
       line-height: 80px;
     }
-      
+
        ul.usuario li a {
         display: block;
         padding: 0 10px;
@@ -181,7 +204,7 @@ top :5%;
 left: 70%;
 height: 25px;
   width: 30px;
-  
+
   color:#198F67;
   cursor: pointer;
 }
@@ -189,7 +212,7 @@ height: 25px;
 .write{
 
   position: absolute;
-    top:0%;    
+    top:0%;
     border-style: solid;
     border-color: black;
     border-width: 3px;
@@ -202,7 +225,7 @@ height: 25px;
 .write_perfil{
 
   position: relative;
-    top:15%;    
+    top:15%;
     width:850px;
     height:300px;
     background: white;
@@ -297,7 +320,7 @@ p b.est{
 }
 .mensaje_body
 {
-  
+
    position: absolute;
    left: 30%;
    top:25%;
@@ -311,7 +334,7 @@ p b.est{
    position: absolute;
    left: 80%;
    top:5%;
-   border-color:#198F67; 
+   border-color:#198F67;
    border-style : solid;
 }
 .avatar_mensaje{
@@ -320,7 +343,7 @@ p b.est{
    position: absolute;
    left: 10%;
    top:25%;
-   border-color:#198F67; 
+   border-color:#198F67;
    border-style : solid;
    float: left;
 
@@ -331,7 +354,7 @@ p b.est{
    position: absolute;
    left: 10%;
    top:0%;
-   border-color:#198F67; 
+   border-color:#198F67;
    border-style : solid;
 }
 
@@ -372,12 +395,12 @@ input[type="text"],input[type="password"]{
   width:15%;
   padding:2px 0px 5px 5px;
   border-radius:5px;
-  
+
   @include disable;
   border:1px solid rgba(0,0,0,1);
   margin-left: 10px;
   color:black;
-  
+
 }
 .footer {
   margin-top:150px;
@@ -387,7 +410,7 @@ input[type="text"],input[type="password"]{
    width: 100%;
    background-color:#282828;
    color: white;
-   
+
     height:100px;
 }
 .upload {

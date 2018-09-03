@@ -79,6 +79,27 @@ nav {
     margin-top:-150px;
 }
 
+.new_link {
+
+    position: absolute;
+    color: #FFFFFF;
+    top:32%;
+    left:95%;
+    width:600px;
+    margin-left:100px;
+    height:450px;
+    margin-top:-150px;
+
+} 
+
+#new_link_submit {
+  margin-top: 30px;
+}
+
+#new_link_title {
+  margin-bottom: 30px;
+}
+
 .bloq{
 
     position: absolute;

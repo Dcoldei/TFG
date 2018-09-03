@@ -20,31 +20,10 @@
 
   			<h1>Enlaces</h1>
   			<p>Lista de enlaces de interés asociados a tu facultad.</p>
-  			<div class="list_left">
-	  			<ul class="list">
-		  			</li>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/">Fdi</a></li>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/examenes-por-curso-y-grupo">Exámenes FDI</a></li>
-		  			<li class="list"><a class="links" href="https://idiomascomplutense.es/">Idiomas FDI</a></li>
-		  			<li class="list"><a class="links" href="http://www.ucm.es/ucm-en-linea">UCM Online</a></li>
-		  		</ul>
-	  		</div>
-	  		<div class="list_center">
-	  			<ul class="list">
-	  				<li class="list"><a class="links" href="http://delegacion.fdi.ucm.es/">Delegación de Alumnos</a></li>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/horarios">Horarios Fdi</a></li>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/master">Masteres Fdi</a></li>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/acceso-y-matriculacion-curso-2016-2017">Matriculación Fdi</a></li>
-		  		</ul>
-	  		</div>
-	  		<div class="list_right">
-	  			<ul class="list">
-		  			<li class="list"><a class="links" href="https://www.ucm.es/simulador">Calculadora de matrícula ucm</a>
-		  			<li class="list"><a class="links" href="http://informatica.ucm.es/informatica/practicas-en-empresa-grados">Prácticas Grados</a>
-		  			<li class="list"><a class="links" href="https://www.youtube.com/user/finformaticaucm">Fdi en Youtube</a>
-		  			<li class="list"><a class="links" href="https://twitter.com/informaticaucm?lang=es">Twitter Fdi</a>
-		  		</ul>
-	  		</div>
+  			<ul class="list">
+  			{% for enlace in enlaces %}
+  				<li class="list"><a class="links" href={{enlace.enlace}}>{{enlace.nombre}}</a></li>
+  			{% endfor %}
 
 			
 		</div>

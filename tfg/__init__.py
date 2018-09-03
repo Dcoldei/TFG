@@ -6,7 +6,7 @@ from humbledb import Mongo, Document, Index
 from bson.objectid import ObjectId
 
 
-UPLOAD_FOLDER = '/Users/dani/Documents/trabajo/tfg/static'
+UPLOAD_FOLDER = '../trabajo/tfg/static'
 
 
 app = Flask(__name__)

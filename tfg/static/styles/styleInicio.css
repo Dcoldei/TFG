@@ -11,7 +11,7 @@
   width: 300px;
 
   padding-top: 4px;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
   padding-right: 10px;
   padding-left: 10px;
   position: relative;
@@ -22,8 +22,8 @@
   font:  15px Oswald;
   text-align: center;
   margin-bottom: 15px;
-  
-  
+
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -31,57 +31,55 @@
   }
 .ult_arch{
 
-  position: absolute;
+  position: relative;
+  top: 0;
   left: 68%;
-  top: 25%;
   border-left-style: solid;
   border-left-color: black;
   border-left-width: 2px;
   height: 220px;
   width: 440px;
-   
+  margin-top: -80px;
+
 
 }
 .link_correo{
 
-  margin-left: 20px;  
-  font: 15px Oswald; 
-  color: #006400; 
+  margin-left: 20px;
+  font: 15px Oswald;
+  color: #006400;
   text-decoration:none;
 
 }
 .correo{
 
 
-  padding-top: 15px; 
-  padding-bottom: 15px; 
+  padding-top: 15px;
+  padding-bottom: 15px;
   background-color:#FFFAFA;
 }
 .correo:hover{
    background-color: #F5F5F5;
 
-} 
+}
 
 .wrapper{
 
     position: absolute;
     color: #FFFFFF;
-    top:48%;
-    left:25%;
-    width:450px;
-    margin-left:-200px;
+    top:200px;
+    width:100%;
     height:450px;
-    margin-top:-150px;
 }
-
+.title {
+  margin-left: 150px;
+}
 .searcher{
-
-    position: absolute;
+    position: relative;
     color: #FFFFFF;
-    top:60%;
+    top:90px;
     left:40%;
     width:350px;
-    height:450px;
     margin-top:-150px;
 }
 .footer {
@@ -92,12 +90,12 @@
    width: 100%;
    background-color:#282828;
    color: white;
-   
+
     height:100px;
 }
 .env_busqueda{
 
-  position: absolute;  
+  position: absolute;
   top:60%;
   background: #F5F5F5;
   width: 99%;
@@ -118,22 +116,22 @@
   background: white;
   border-style: solid;
   border-color: #708090;
-  
-  
-  
-  
+
+
+
+
 }
 .busqueda{
 
     position: absolute;
     color: #FFFFFF;
     background: white;
-    z-index: 9;    
+    z-index: 9;
     margin-top: 60px;
     width:70%;
     margin-left:6%;
     height:450px;
-    
+
 }
 
 
@@ -142,7 +140,7 @@ h1{
   text-align:$align;
   padding:0px 0px 0px 0px;
   font:25px Oswald;
-  
+
   color:    #000000;
   text-transform:uppercase;
   /*text-shadow:#000 0px 1px 5px;*/
@@ -154,7 +152,7 @@ p{
   color:    #000000;
   /*text-shadow:#000 0px 1px 5px;*/
   margin-top: :30px;
- 
+
   margin-bottom:  30px;
 }
 
@@ -166,11 +164,11 @@ input[type="text"],input[type="password"]{
   width:50%;
   padding:8px 0px 8px 8px;
   border-radius:5px;
-  
+
   @include disable;
   border:1px solid rgba(0,0,0,1);
-  
-  
+
+
   text-shadow:#000 0px 1px 5px;
 }
 

@@ -1,5 +1,5 @@
 
-  
+
 .button:hover {
           background: #0b76a6;
         }
@@ -10,7 +10,7 @@
   width: 75px;
 
   padding-top: 2px;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
   padding-right: 10px;
   padding-left: 10px;
   position: relative;
@@ -22,7 +22,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -34,7 +34,7 @@
   width: 150px;
 
   padding-top: 2px;
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
   padding-right: 10px;
   padding-left: 10px;
   position: relative;
@@ -46,7 +46,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -59,7 +59,7 @@
   position: absolute;
   left: 600px;
   top: 180px;
-  
+
   position: relative;
   background-color:#198F67;
   color:rgb(255,255,255);
@@ -69,7 +69,7 @@
   text-align: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -85,33 +85,33 @@
 }
 
 .menu_usuario{
-  
+
   font:20px Oswald;
   text-align: center;
-  
-  
-  
+
+
+
   border-bottom-style: solid;
 
 
   border-bottom-color: #00FF00;
- 
+
 
 
 }
 .menu_usuario a{
-  
+
   color : #696969;
-  
+
 
 
 }
 
 
 .enlace:hover{
-  
+
   color : red;
-  
+
 }
 
 ul.filtro,li.filtro{
@@ -120,7 +120,7 @@ ul.filtro,li.filtro{
 }
 ul.filtro{
   overflow:hidden;
-  
+
 }
 ul.filtro li.filtro a.filtro{
   text-decoration:none;
@@ -129,7 +129,7 @@ ul.filtro li.filtro a.filtro{
   display:block;
   width: 90px;
   padding:5px;
-   
+
   border-color: black;
     border-style: solid;
     border-width: 2px;
@@ -142,20 +142,20 @@ ul.filtro li.filtro a.filtro_activo{
   display:block;
   width: 90px;
   padding:5px;
-   
+
   border-color: black;
     border-style: solid;
     border-width: 2px;
 
 }
 ul.filtro li.filtro a.filtro:hover{
-  
+
   background:#228B22;
   color: white;
 
 }
 ul.filtro li.filtro{
-  
+
   float:left;
 }
 
@@ -210,7 +210,7 @@ ul.nota li.nota h2{
   font-family: "Condiment", cursive;
   font-size:140%;
 
-  
+
 }
 ul.nota li.nota p{
   font-family:"Reenie Beanie",arial,sans-serif;
@@ -256,10 +256,10 @@ ul.nota li.nota a.nota:hover,ul.nota li.nota a.nota:focus{
 
     /*background: #FFFFFF;*/
     position: absolute;
-    
+
     /*nos posicionamos en el centro del navegador*/
 
-    top:48%;
+    top:400px;
 
     left:14%;
 
@@ -272,13 +272,13 @@ ul.nota li.nota a.nota:hover,ul.nota li.nota a.nota:focus{
     /*indicamos que el margen superior, es la mitad de la altura*/
 
     margin-top:-150px;
-    
+
 
 }
 .mural
 {
   position: absolute;
-  
+
   top:20%;
 
   left:0%;
@@ -288,10 +288,10 @@ ul.nota li.nota a.nota:hover,ul.nota li.nota a.nota:focus{
   min-height: 600px;
   min-width: 60%;
   max-width: 80%;
-  
+
   font-family:arial,sans-serif;
   font-size:100%;
-  
+
   background:#DCDCDC;
   color:#fff;
 
@@ -303,13 +303,13 @@ ul.nota li.nota a.nota:hover,ul.nota li.nota a.nota:focus{
 .menu_notas{
 
     /*background: #FFFFFF;*/
- 
-    position:absolute; 
+
+    position:absolute;
     color: #FFFFFF;
     background: white ;
     /*nos posicionamos en el centro del navegador*/
 
-    top:25%;
+    top:200px;
     padding-left: 20px;
     left:0%;
 
@@ -332,11 +332,11 @@ ul.nota li.nota a.nota:hover,ul.nota li.nota a.nota:focus{
   margin-left: -15%;
    position: absolute;
    left: 0%;
-  top: 100%;
+  top: 800px;
    width: 115%;
    background-color:#282828;
    color: white;
-   
+
     height:100px;
 }
 
@@ -345,7 +345,7 @@ h1{
   text-align:$align;
   padding:0px 0px 0px 0px;
   font:25px Oswald;
-  
+
   color:    #000000;
   text-transform:uppercase;
   /*text-shadow:#000 0px 1px 5px;*/
@@ -357,7 +357,7 @@ p{
   color:    #000000;
   /*text-shadow:#000 0px 1px 5px;*/
   margin-top: :30px;
- 
+
   margin-bottom:  30px;
 }
 
@@ -367,7 +367,7 @@ p{
 
 
 input[type="textarea"]{
-  
+
 }
 
 input[type="text"],input[type="password"]{
@@ -378,7 +378,7 @@ input[type="text"],input[type="password"]{
   background:rgba(0,0,0,0.2);
   @include disable;
   border:1px solid rgba(0,0,0,1);
-  
+
   color:#FFFFFF;
   text-shadow:#000 0px 1px 5px;
 }

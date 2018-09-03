@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="utf-8">
    		<title>Horario</title>
-	  
+
 	<link href='https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Montserrat+Alternates ' rel='stylesheet' type='text/css'>
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>   
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
 	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styleHorario.css') }}">
 	<link rel='stylesheet' href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.min.css')}}">
 	</head>
@@ -15,15 +15,15 @@
 
  		{% include 'user/menu_user.html' %}
 
-		
-		
-		<div class="env_busqueda" style="top: 20%">
+
+
+		<div class="env_busqueda" style="top: 180px">
 			<div class="intro">
 				<button id="a_asig" class="button" >Añadir Asignatura</button>
 				<button id="e_asig" class="button" >Eliminar Asignatura</button>
 				<h1>Horario</h1>
   				<p>Crea tu horario con las clases y actividades que tengas que realizar durante el curso.</p>
-  				
+
 			</div>
 			<button id="t" class="button" > Tarde </button>
 			<button id="m" class="button" > Mañana </button>
@@ -56,9 +56,9 @@
 						<div class="celda">{{h.x}}</div>
 						<div class="celda">{{h.j}}</div>
 						<div class="celda">{{h.v}}</div>
-	  				</div>	
+	  				</div>
 				{% endfor %}
-			</div>		
+			</div>
 
 			<div class="resul_busqueda" id="tarde">
 				<div class="fila" style="position: sticky; top:80px; z-index: 3;background: white;border-radius:25px;-moz-border-radius: 25px; -webkit-border-radius: 25px;">
@@ -88,9 +88,9 @@
 						<div class="celda">{{h.x}}</div>
 						<div class="celda">{{h.j}}</div>
 						<div class="celda">{{h.v}}</div>
-	  				</div>	
+	  				</div>
 				{% endfor %}
-			</div>		
+			</div>
 			<div class="resul_busqueda" id="agregar">
 				<h1>Agregar Asignatura o Actividad</h1>
 				<form class="form" method="post" action="/usuario/horario/agregar">
@@ -101,13 +101,13 @@
 	   						<option selected="true" disabled="disabled">Seleccione Nº Horas</option>
 	  						{% for n in range(1, 11) %}
 	  							<option value={{ n }}> {{n}} </option>
-							{% endfor %}					
+							{% endfor %}
 						</select>
 					</p>
 					<div id='input_list'></div>
 					<button type="submit" id="enviar" class="button" > Enviar </button>
 				</form>
-			</div> 
+			</div>
 			<div class="resul_busqueda" id="eliminar">
 				<h1>Eliminar Asignatura o Actividad</h1>
 				<form class="form" method="post" action="/usuario/horario/eliminar">
@@ -116,53 +116,53 @@
 	   					<select name="asignatura"  id="titul" style="width:120px" onchange='genList(this.value);'>
 	  						{% for n in asig %}
 	  							<option value={{n}}> {{n}} </option>
-							{% endfor %}					
+							{% endfor %}
 						</select>
 					</p>
 					<div id='input_list'></div>
 					<button type="submit" id="enviar" class="button" > Enviar </button>
 				</form>
-			</div> 
+			</div>
     	</div>
-    	{% include 'user/footer.html' %}	
+    	{% include 'user/footer.html' %}
     	<script>
 		$(document).ready(function(){
 
-			
+
 	    	$("#tarde").hide();
 	    	$("#agregar").hide();
 	    	$("#eliminar").hide();
-	    	
-		    
+
+
 			$("#t").click(function(){
 				$("#agregar").hide();
 				$("#tarde").show();
 				$("#eliminar").hide();
 				$("#ma").hide();
-		       
+
 		    });
 		    $("#m").click(function(){
 		    	$("#agregar").hide();
 				$("#tarde").hide();
 				$("#eliminar").hide();
 				$("#ma").show();
-		       
+
 		    });
 		    $("#a_asig").click(function(){
 				$("#tarde").hide();
 				$("#ma").hide();
 				$("#eliminar").hide();
 				$("#agregar").show();
-		       
+
 		    });
 		    $("#e_asig").click(function(){
 				$("#tarde").hide();
 				$("#ma").hide();
 				$("#agregar").hide();
 				$("#eliminar").show();
-		       
+
 		    });
-		    
+
 		});
 	</script>
 	<script>
@@ -171,11 +171,11 @@
 		impar = 0;
  		par = 0;
  		for(var i = 0; i < num; i++){
- 			
+
  			var n = i + 1;
  			var myDiv = document.getElementById("input_list");
- 			
- 				
+
+
 				var array = ["Lunes","Martes","Miércoles","Jueves","Viernes"];
 				var selectList = document.createElement("select");
 				myDiv.appendChild(selectList);
@@ -187,7 +187,7 @@
 		   	 	option.text = array[j];
 		   		selectList.appendChild(option);
 				}
- 							
+
 				var selectList = document.createElement("select");
 				myDiv.appendChild(selectList);
 				selectList.name = 'hora' + n;
@@ -198,7 +198,7 @@
 		   	 	option.text = j;
 		   		selectList.appendChild(option);
 				}
- 				
+
  			}
 		}
 
@@ -209,7 +209,7 @@
  				}
 			}
 
-	</script>	
+	</script>
 	</body>
 
 </html>

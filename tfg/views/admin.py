@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint,Flask, render_template, make_response, current_app, redirect, url_for, jsonify, request
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
-from flask import request 
+from flask import request
 from random import randint
 from time import time
 from humbledb import Mongo, Document, Index
@@ -40,7 +40,7 @@ def required_roles(*roles):
          return f(*args, **kwargs)
       return wrapped
    return wrapper
- 
+
 def get_current_user_role():
    return g.user.role
 
@@ -60,19 +60,19 @@ def allowed_file(filename):
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS PARTE DE ADMINISTRADOR                                                           #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @admin.route('/admin', methods = ["GET"])
-def admin_access():		
-	return render_template("admin/welcome_admin.html")	
+def admin_access():
+	return render_template("admin/welcome_admin.html")
 
 
 
 
-		
+
 @admin.route('/admin/comp_ident', methods = ["POST"])
-def comprobar_admin():		
+def comprobar_admin():
 	if request.method == 'POST':
 		values = {}
 		values["nombre"] = request.form['nombre']
@@ -86,13 +86,16 @@ def comprobar_admin():
 				if values["password"] == admin.password and admin.role == "Admin":
 					user = User(values["nombre"],admin.role)
 					login_user(user)
-					return render_template("admin/inicio_admin.html", value = values)	
+					return render_template("admin/inicio_admin.html", value = values)
 				else:
 					return render_template("admin/ident_fallida.html", value = values)
-					
+
 @admin.route('/admin/inicio/<string:nombre>', methods = ["GET"])
-def admin_inicio(nombre):	
-	with Mongo: 
+@login_required
+@required_roles('Admin')
+def admin_inicio(nombre):
+
+	with Mongo:
 		u  = Usuario.find_one({Usuario.nombre : nombre})
 		posts = Post.find({Post.denuncia: True}).count()
 		comentarios = Comentario.find({Comentario.denuncia: True}).count()
@@ -100,7 +103,7 @@ def admin_inicio(nombre):
 		denuncias = posts + comentarios + mensajes
 		pendientes = Archivo.find({Archivo.autorizado: False}).count()
 
-	return render_template("admin/inicio_admin.html", usuario = u, denuncias = denuncias, pendientes= pendientes)	
+	return render_template("admin/inicio_admin.html", usuario = u, denuncias = denuncias, pendientes= pendientes)
 
 
 
@@ -108,49 +111,156 @@ def admin_inicio(nombre):
 @login_required
 @required_roles('Admin')
 def config(nombre):
-	with Mongo: 
+	with Mongo:
 		u  = Usuario.find_one({Usuario._id : ObjectId(nombre)})
-		
+	return render_template("admin/config.html", usuario = u )
 
-	return render_template("admin/config.html", usuario = u )		
+@admin.route('/admin/config/agregar/user-admin',methods=['GET', 'POST'])
+@login_required
+@required_roles('Admin')
+def agregar_admin():
+	with Mongo:
+		usuario = Usuario()
+		u  = Usuario.find_one({Usuario.nombre : request.form['user']})
+		usuario.nombre = request.form['name']
+		usuario.password = request.form['password']
+		usuario.role = "admin"
+		Usuario.insert(usuario)
+	return render_template("admin/config.html", usuario = u )
 
 @admin.route('/admin/perfil/cambiar_nombre')
+@login_required
+@required_roles('Admin')
 def admin_nuevo_nombre():
 	nombre = request.args.get('nombre')
 	with Mongo:
 		u = Usuario.find_one({Usuario.nombre: request.args.get('nuevo_nombre')})
-		if u == None:			
-			Usuario.update({Usuario.nombre : nombre },{'$set': {Usuario.nombre: request.args.get('nuevo_nombre')}})	
+		if u == None:
+			Usuario.update({Usuario.nombre : nombre },{'$set': {Usuario.nombre: request.args.get('nuevo_nombre')}})
 			textosalida = ''''''
 			repeat = "No"
 		else:
 			textosalida = '''Nombre de Usuario ya existente, elija otro.'''
 			repeat = "Si"
-	
+
 	return jsonify(result=textosalida,repeat=repeat)
 
 @admin.route('/admin/perfil/cambiar_password')
+@login_required
+@required_roles('Admin')
 def admin_nuevo_pass():
 	nombre = request.args.get('nombre')
 	print(request.args.get('nombre'))
 	print()
 	with Mongo:
-		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.password: request.args.get('nuevo_pass')}})		
+		Usuario.update({Usuario.nombre : request.args.get('nombre') },{'$set': {Usuario.password: request.args.get('nuevo_pass')}})
 
 	textosalida = '''<b>Password >> </b>'''+request.args.get('nuevo_pass')+'''<button id="usuario_password"   class="button" > Editar </button>'''
 	return jsonify(result=textosalida)
+
+###################################################################################################################
+#                                                                                                                 #
+#                          VIEWS ENLACES                                                                          #
+#                                                                                                                 #
+###################################################################################################################
+
+@admin.route('/admin/enlaces/<string:nombre>', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
+def admin_enlaces(nombre):
+	activos = []
+	bloqueados = []
+	with Mongo:
+		u  = Usuario.find_one({Usuario._id : ObjectId(nombre)})
+		facul = Facultad.find_one()
+		titul = Titulacion.find_one({Titulacion.id_facultad: facul._id})
+		enlaces = Enlaces.find({Enlaces.id_titulacion: titul._id})
+		titul = Titulacion.find({Titulacion.id_facultad: facul._id})
+		facul = Facultad.find()
+		t = Titulacion.find()
+		
+	return render_template("admin/enlaces.html", usuario=u, facul = facul, titul = titul, enlaces=enlaces, titulaciones=t)
+
+@admin.route('/admin/enlaces/facultad/_search')
+@login_required
+@required_roles('Admin')
+def search_enlaces():
+	asig = []
+	print("Hola")
+	print(request.args.get('busqueda'))
+	with Mongo:
+		facul = Facultad.find_one({Facultad._id: ObjectId(request.args.get('busqueda')) })
+		titul_one = Titulacion.find_one({Titulacion.id_facultad: facul._id})
+		titul = Titulacion.find({Titulacion.id_facultad: facul._id})
+		facul = Facultad.find()
+		enlaces = Enlaces.find({Enlaces.id_titulacion: titul_one._id})
+	titulacion = ""
+	enl=""
+	for t in titul:
+		titulacion += "<option value= "+ str(t._id) +" >"+t.nombre+"</option>"
+	for b in enlaces:
+		enl += "<option value= "+ str(b._id) +" >"+b.nombre+"</option>"
+	return jsonify(result=titulacion,enlaces=enl)
+
+@admin.route('/admin/enlaces/titulacion/_search')
+@login_required
+@required_roles('Admin')
+def search_enlaces_t():
+	asig = []
+	with Mongo:
+		titul_one = Titulacion.find_one({Titulacion._id: ObjectId(request.args.get('busqueda'))})
+		enlaces = Enlaces.find({Enlaces.id_titulacion: titul_one._id})
+	enl=""
+	for b in enlaces:
+		enl += "<option value= "+ str(b._id) +" >"+b.nombre+"</option>"
+	return jsonify(enlaces=enl)
+
+
+@admin.route('/admin/enlaces/borrar', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
+def admin_enlaces_borrar():
+	if request.method == 'POST':
+		nombre = request.form['nombre']
+		borrar = request.form['borrar']
+		with Mongo:
+			u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
+			Enlaces.delete_one({Enlaces._id: ObjectId(borrar)})
+
+		return redirect(url_for('admin.admin_enlaces' , nombre = u._id))
+
+@admin.route('/admin/enlaces/agregar', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
+def admin_enlaces_agregar():
+	if request.method == 'POST':
+		nombre = request.form['nombre']
+		url = request.form['url']
+		titulacion = request.form['enlace']
+		with Mongo:
+			u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
+			t = Titulacion.find_one({Titulacion.nombre : titulacion})
+		enlace = Enlaces()
+		enlace.nombre = nombre
+		enlace.enlace = url
+		enlace.id_titulacion = t._id
+		Enlaces.insert(enlace)
+
+		return redirect(url_for('admin.admin_enlaces' , nombre = u._id))
 
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS BORRAR FACULTAD , TITULACION ,TRATAR CON USUARIOS Y ARCHIVOS                     #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @admin.route('/admin/usuarios/<string:nombre>', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def admin_usuarios(nombre):
 	activos = []
-	bloqueados = []	
+	bloqueados = []
 	with Mongo:
 		u  = Usuario.find_one({Usuario._id : ObjectId(nombre)})
 		facul = Facultad.find_one()
@@ -164,10 +274,12 @@ def admin_usuarios(nombre):
 			else:
 				bloqueados.append(usuario.nombre)
 
-	return render_template("admin/bloquear_usuario.html", activos=activos , bloqueados=bloqueados, usuario=u, facul = facul, titul = titul)	
+	return render_template("admin/bloquear_usuario.html", activos=activos , bloqueados=bloqueados, usuario=u, facul = facul, titul = titul)
 
 
 @admin.route('/admin/bloquear_usuario', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def admin_bloquear():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
@@ -180,12 +292,14 @@ def admin_bloquear():
 
 
 
-		return redirect(url_for('admin/admin_usuarios' ,nombre = u._id))	
+		return redirect(url_for('admin/admin_usuarios' ,nombre = u._id))
 
 @admin.route('/admin/bloquear_usuario/facultad/_search')
+@login_required
+@required_roles('Admin')
 def search_usuarios():
 	activos = []
-	bloqueados = []	
+	bloqueados = []
 	with Mongo:
 		facultad = Facultad.find_one({Facultad.nombre : request.args.get('busqueda')})
 		titul = Titulacion.find({Titulacion.id_facultad : facultad._id})
@@ -208,9 +322,11 @@ def search_usuarios():
 	return jsonify(result=textosalida,activar=bl,bloquear=ac)
 
 @admin.route('/admin/bloquear_usuario/titulacion/_search')
+@login_required
+@required_roles('Admin')
 def search_usuarios_t():
 	activos = []
-	bloqueados = []	
+	bloqueados = []
 	with Mongo:
 		titul = Titulacion.find({Titulacion.nombre: request.args.get('busqueda')})
 		t = Titulacion.find_one({Titulacion.nombre : request.args.get('busqueda')})
@@ -230,6 +346,8 @@ def search_usuarios_t():
 
 
 @admin.route('/admin/desbloquear_usuario', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def admin_desbloquear():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
@@ -244,6 +362,8 @@ def admin_desbloquear():
 
 
 @admin.route('/admin/pendientes/<string:nombre>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_pendientes(nombre):
 	pendientes = []
 	with Mongo:
@@ -254,8 +374,10 @@ def admin_pendientes(nombre):
 	return render_template("admin/pendientes.html", pendientes=pendientes,archivos=archivos, usuario=u)
 
 @admin.route('/admin/denuncias/<string:nombre>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_denuncias(nombre):
-	
+
 	with Mongo:
 		u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
 		posts = Post.find({Post.denuncia: True})
@@ -267,8 +389,10 @@ def admin_denuncias(nombre):
 
 
 @admin.route('/admin/denuncias/eliminar/<string:nombre>/<string:identidad>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_denuncias_eliminar(nombre,identidad):
-	
+
 	with Mongo:
 		Mensaje.remove({Mensaje._id : ObjectId(identidad) })
 		Post.remove({Post._id : ObjectId(identidad) })
@@ -278,8 +402,10 @@ def admin_denuncias_eliminar(nombre,identidad):
 	return redirect(url_for('admin.admin_denuncias', nombre = nombre))
 
 @admin.route('/admin/denuncias/obviar/<string:nombre>/<string:identidad>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_denuncias_obviar(nombre,identidad):
-	
+
 	with Mongo:
 		Mensaje.update({Mensaje._id : ObjectId(identidad) },{'$set': {Mensaje.denuncia: False}})
 		Post.update({Post._id : ObjectId(identidad) },{'$set': {Post.denuncia: False}})
@@ -289,8 +415,10 @@ def admin_denuncias_obviar(nombre,identidad):
 	return redirect(url_for('admin.admin_denuncias', nombre = nombre))
 
 @admin.route('/admin/denuncias/cargar/<string:usuario>/<string:den>/<int:tipo>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_denuncias_cargar(usuario,den,tipo):
-	
+
 	denuncia = {}
 	with Mongo:
 		u = Usuario.find_one({Usuario._id : ObjectId(usuario)})
@@ -300,8 +428,8 @@ def admin_denuncias_cargar(usuario,den,tipo):
 		if tipo==1:
 			denuncia = Post.find_one({Post._id : ObjectId(den)})
 		elif tipo==2:
-			denuncia = Comentario.find_one({Comentario._id : ObjectId(den)})	
-		else:			
+			denuncia = Comentario.find_one({Comentario._id : ObjectId(den)})
+		else:
 			m = Mensaje.find_one({Mensaje._id : ObjectId(den)})
 			denuncia['body'] = m.body
 			denuncia['fecha'] = m.fecha
@@ -314,6 +442,8 @@ def admin_denuncias_cargar(usuario,den,tipo):
 
 
 @admin.route('/admin/autorizar', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def admin_autorizar():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
@@ -325,6 +455,8 @@ def admin_autorizar():
 		return redirect(url_for('admin/admin_pendientes' , nombre = u))
 
 @admin.route('/admin/archivos/<string:nombre>', methods = ["GET"])
+@login_required
+@required_roles('Admin')
 def admin_archivos(nombre):
 	lista = []
 	asig = []
@@ -347,8 +479,10 @@ def admin_archivos(nombre):
 
 
 @admin.route('/admin/archivos/facultad/_search')
+@login_required
+@required_roles('Admin')
 def search_archivos():
-	asig = []	
+	asig = []
 	print("Hola")
 	print(request.args.get('busqueda'))
 	with Mongo:
@@ -375,8 +509,10 @@ def search_archivos():
 	return jsonify(result=titulacion,asignaturas=asign,archivos=arch)
 
 @admin.route('/admin/archivo/titulacion/_search')
+@login_required
+@required_roles('Admin')
 def search_archivos_t():
-	asig = []	
+	asig = []
 	with Mongo:
 		titul_one = Titulacion.find_one({Titulacion._id: ObjectId(request.args.get('busqueda'))})
 		print(titul_one.nombre)
@@ -396,8 +532,10 @@ def search_archivos_t():
 	return jsonify(asignaturas=asign,archivos=arch)
 
 @admin.route('/admin/archivo/asignatura/_search')
+@login_required
+@required_roles('Admin')
 def search_archivos_a():
-	asig = []	
+	asig = []
 	with Mongo:
 		archivos = Archivo.find({Archivo.id_asignatura: ObjectId(request.args.get('busqueda'))})
 	arch=""
@@ -418,6 +556,8 @@ def uploaded_file_admin(filename):
                      attachment_filename=filename,as_attachment=True)
 
 @admin.route('/admin/archivo/borrar', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def admin_archivo_borrar():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
@@ -440,7 +580,9 @@ def admin_archivo_borrar():
 
 
 @admin.route('/admin/borrar_facultad/<string:facultad>/<string:usuario>', methods = ["GET","POST"])
-def admin_borrar(facultad,usuario):	
+@login_required
+@required_roles('Admin')
+def admin_borrar(facultad,usuario):
 	with Mongo:
 		usuario = Usuario.find_one({Usuario._id: ObjectId(usuario)})
 		facultad = Facultad.find_one({Facultad.nombre : facultad})
@@ -458,18 +600,20 @@ def admin_borrar(facultad,usuario):
 				Curso.delete_one({Curso._id : id_curso})
 				Titulacion.delete_one({Titulacion._id : id_titulacion})
 
-	return redirect(url_for('admin/admin_inicio' , nombre = usuario.nombre))
-	
+	return redirect(url_for('admin.admin_inicio' , nombre = usuario.nombre))
+
 
 @admin.route('/admin/borrar_facultad_titul/<string:titulacion>/<string:usuario>', methods = ["GET","POST"])
-def admin_borrar_titul(titulacion, usuario):	
+@login_required
+@required_roles('Admin')
+def admin_borrar_titul(titulacion, usuario):
 	with Mongo:
 		usuario = Usuario.find_one({Usuario._id : ObjectId(usuario)})
 		lista_titul= []
 		lista_cursos = []
 		t = Titulacion.find_one({Titulacion.nombre: ObjectId(titulacion)})
 		id_facultad = t.id_facultad
-		facultad = Facultad.find_one({Facultad._id : id_facultad })	
+		facultad = Facultad.find_one({Facultad._id : id_facultad })
 		numero = facultad.num_titul
 		numero -= 1
 		titulaciones = facultad.titulaciones
@@ -478,7 +622,7 @@ def admin_borrar_titul(titulacion, usuario):
 				num = i
 			else:
 				lista_titul.append(titulaciones[i])
-		cursos_x_titul = facultad.cursos_x_titul 
+		cursos_x_titul = facultad.cursos_x_titul
 		for i in range(len(cursos_x_titul)):
 			if i != num:
 				lista_cursos.append(cursos_x_titul[i])
@@ -495,73 +639,83 @@ def admin_borrar_titul(titulacion, usuario):
 			Asignatura.delete_many({Asignatura.id_curso : id_curso})
 			Curso.delete_one({Curso._id : id_curso})
 		Titulacion.delete_one({Titulacion._id : t._id})
-	return redirect(url_for('admin/admin_inicio' , nombre = usuario.nombre))			
+	return redirect(url_for('admin/admin_inicio' , nombre = usuario.nombre))
 
 @admin.route('/admin/modificar_facul/<string:nombre>', methods = ["GET","POST"])
-def admin_modificar(nombre):	
+@login_required
+@required_roles('Admin')
+def admin_modificar(nombre):
 	if request.method == 'GET':
 		values = []
-		with Mongo: 
+		with Mongo:
 			u = Usuario.find_one({Usuario._id: ObjectId(nombre)})
 			facultades = Facultad.find().sort("nombre")
 			for facultad in facultades:
 				values.append(facultad.nombre)
-		return render_template("admin/modificar_inicio.html", vs = values, usuario=u)		
+		return render_template("admin/modificar_inicio.html", vs = values, usuario=u)
 
 
 @admin.route('/admin/modificar_facultad', methods = ["GET","POST"])
-def admin_modificar_facultad():	
-		
+@login_required
+@required_roles('Admin')
+def admin_modificar_facultad():
+
 
 	if request.method == 'POST':
 
 		values = []
 		usuario = request.form['nombre']
 		nombre = request.form['facultad']
-		with Mongo: 
+		with Mongo:
 			u = Usuario.find_one({Usuario._id: ObjectId(usuario)})
 			facultad = Facultad.find_one({Facultad.nombre: nombre })
 			id_facultad = facultad._id
 			titulaciones = Titulacion.find({Titulacion.id_facultad : id_facultad}).sort("nombre")
 			#for titulacion in titulaciones:
-			#	values.append(titulacion.nombre)	
+			#	values.append(titulacion.nombre)
 
 		return render_template("admin/modificar_facultad.html", vs = titulaciones , facultad = nombre, usuario= u)
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS MOSTRAR TITULACION EN ADMIN Y BORRAR UNA ASIGNATURA                                                          #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 @admin.route('/admin/mostrar_titul/<string:titulacion>/<string:usuario>', methods = ["GET"])
-def admin_modificar_titul(titulacion,usuario):	
-	with Mongo: 
+@login_required
+@required_roles('Admin')
+def admin_modificar_titul(titulacion,usuario):
+	with Mongo:
 		titulacion = Titulacion.find_one({Titulacion._id: ObjectId(titulacion)})
 		cursos = Curso.find({Curso.id_titulacion : titulacion._id })
 		usuario= Usuario.find_one({Usuario._id : ObjectId(usuario)})
-	return render_template("admin/mostrar_titulacion.html", usuario = usuario, titulacion = titulacion, cursos = cursos)	
+	return render_template("admin/mostrar_titulacion.html", usuario = usuario, titulacion = titulacion, cursos = cursos)
 
 @admin.route('/admin/agregar_curso/<string:nombre>/<string:usuario>', methods = ["GET"])
-def admin_agregar_curso(nombre, usuario):	
+@login_required
+@required_roles('Admin')
+def admin_agregar_curso(nombre, usuario):
 	n = 20
-	with Mongo: 
+	with Mongo:
 		usuario = Usuario.find_one({Usuario._id: ObjectId(usuario)})
 		titulacion = Titulacion.find_one({Titulacion._id: ObjectId(nombre)})
-		
-			
-	return render_template("admin/agregar_curso.html", titulacion = titulacion , numero = n, usuario= usuario)	
+
+
+	return render_template("admin/agregar_curso.html", titulacion = titulacion , numero = n, usuario= usuario)
 
 @admin.route('/admin/agregar_curso/fin', methods = ["POST"])
-def admin_agregar_curso_fin():	
+@login_required
+@required_roles('Admin')
+def admin_agregar_curso_fin():
 	nombre = request.form['titulacion_id']
-	n = int(request.form['n_asignaturas'])  
-	numero = request.form['numero']  
+	n = int(request.form['n_asignaturas'])
+	numero = request.form['numero']
 	u = request.form['usuario']
 	asi = []
 	for i in range(1,n +1):
 		asignatura = request.form['asignatura_'+ str(i)]
 		asi.append(asignatura)
-	with Mongo: 
+	with Mongo:
 		usuario = Usuario.find_one({Usuario._id : ObjectId(u)})
 		curso = Curso()
 		curso.numero = numero
@@ -575,19 +729,14 @@ def admin_agregar_curso_fin():
 			a.id_curso = id_curso
 			a.nombre_ficheros =[]
 			a.num_ficheros = 0
-			Asignatura.insert(a)		
+			Asignatura.insert(a)
 		titulacion = Titulacion.find_one({Titulacion._id: ObjectId(nombre)})
-		print("TItulacion")
-		print(titulacion.nombre)
 		facultad = Facultad.find_one({Facultad._id: titulacion.id_facultad})
 		n = -1
 		c=[]
 		for t in facultad.titulaciones:
 			n+=1
 			if t == titulacion.nombre:
-				print(titulacion.nombre)
-				print(n)
-				print(facultad.cursos_x_titul[n])
 				d = facultad.cursos_x_titul[n] + 1
 				for l in range(0,len(facultad.cursos_x_titul)):
 					if l!=n:
@@ -602,23 +751,21 @@ def admin_agregar_curso_fin():
 			for v in range(0,len(titulacion.asignaturas[j])):
 				s.append(titulacion.asignaturas[j][v])
 			asig_titulacion.append(s)
-		asig_titulacion.append(asi)	
-		cursos = Curso.find({Curso.id_titulacion : titulacion._id })	
+		asig_titulacion.append(asi)
+		cursos = Curso.find({Curso.id_titulacion : titulacion._id })
 		Titulacion.update({Titulacion._id : ObjectId(nombre) },{'$set': {Titulacion.asignaturas: asig_titulacion }})
 		Titulacion.update({Titulacion._id : ObjectId(nombre) },{'$set': {Titulacion.num_cursos: titulacion.num_cursos + 1 }})
 
 
-	return render_template("admin/mostrar_titulacion.html", titulacion = titulacion, asignaturas = a, cursos = cursos, usuario=usuario)		
+	return render_template("admin/mostrar_titulacion.html", titulacion = titulacion, asignaturas = a, cursos = cursos, usuario=usuario)
 
 @admin.route('/admin/borrar_asignatura', methods = ["POST"])
+@login_required
+@required_roles('Admin')
 def borrar_asig():
-	# Debemos conocer el id_curso de la asignatura ya que podria existir varias asignaturas con 
-	# el mismo nombre y solo podemos distinguirlos por el id_curso. Deberiamos pasarle el id_curso para
-	# poder diferencirlos.
-
 	if request.method == 'POST':
 		titulacion = str(request.form['titulacion'])
-		curso = int(request.form['curso'])  	
+		curso = int(request.form['curso'])
 		n = str(curso)
 		asignatura = request.form['asignatura_'+ n]
 		usuario = request.form['usuario']
@@ -626,15 +773,15 @@ def borrar_asig():
 			titul = Titulacion.find_one({Titulacion.nombre : titulacion})
 			id_titul = titul._id
 			asig_titulacion = []
-			
+
 			for a_x_c  in titul.asignaturas:
 				asig_curso = []
-				for i in range(len(a_x_c)):					
+				for i in range(len(a_x_c)):
 					if a_x_c[i]!= asignatura:
 						asig_curso.append(a_x_c[i])
 				asig_titulacion.append(asig_curso)
 
-			Titulacion.update({Titulacion._id : id_titul },{'$set': {Titulacion.asignaturas: asig_titulacion }})	
+			Titulacion.update({Titulacion._id : id_titul },{'$set': {Titulacion.asignaturas: asig_titulacion }})
 			cursos = Curso.find({Curso.id_titulacion: id_titul})
 			for c in cursos:
 				if c.numero == curso:
@@ -658,17 +805,19 @@ def borrar_asig():
 			#Las dos ultimas lineas son nuevas para borrar los archivos ligados a esa asignatura
 
 
-		return redirect(url_for('admin.admin_modificar_titul', titulacion=id_titul,usuario=usuario))		
-		
+		return redirect(url_for('admin.admin_modificar_titul', titulacion=id_titul,usuario=usuario))
+
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS AGREGAR FACULTAD Y ASIGNATURA                                                      #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 
 @admin.route('/admin/agregar_asignatura/<string:usuario>/<string:titulacion>/<int:curso>', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def agregar_asig(usuario,titulacion,curso):
 
 	with Mongo:
@@ -680,28 +829,30 @@ def agregar_asig(usuario,titulacion,curso):
 
 
 @admin.route('/admin/agregar_asignatura/fin', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def agregar_asignatura_fin():
 
 	if request.method == 'POST':
-		titulacion = request.form['titulacion']	
-		curso = int(request.form['curso'])  	
+		titulacion = request.form['titulacion']
+		curso = int(request.form['curso'])
 		asignatura = request.form['asignatura']
 		usuario = request.form['usuario']
 		with Mongo:
 			titul = Titulacion.find_one({Titulacion.nombre : titulacion})
 			id_titul = titul._id
 			asig_titulacion = []
-			
+
 			for j in range(len(titul.asignaturas)):
 				asig_curso = []
 				for i in range(len(titul.asignaturas[j])):
-					
+
 					asig_curso.append(titul.asignaturas[j][i])
 				if j+1 == curso:
 					asig_curso.append(asignatura)
 				asig_titulacion.append(asig_curso)
-				##NO GUARDA BIEN LAS ASIGNATURAS , SOLO GUARDA LA ULTIMA Y LA CREADA
-			Titulacion.update({Titulacion._id : id_titul },{'$set': {Titulacion.asignaturas: asig_titulacion }})	
+
+			Titulacion.update({Titulacion._id : id_titul },{'$set': {Titulacion.asignaturas: asig_titulacion }})
 			cursos = Curso.find({Curso.id_titulacion: id_titul})
 			for c in cursos:
 				if c.numero == curso:
@@ -722,19 +873,23 @@ def agregar_asignatura_fin():
 
 
 
-		return redirect(url_for('admin.admin_modificar_titul', titulacion=id_titul,usuario=usuario))		
+		return redirect(url_for('admin.admin_modificar_titul', titulacion=id_titul,usuario=usuario))
 
 
 @admin.route('/admin/agregar_facul/<string:nombre>', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def agregar_facult(nombre):
 	values = {0,1,2,3,4,5}
 	if request.method == 'GET':
 		with Mongo:
 			usuario = Usuario.find_one({Usuario._id: ObjectId(nombre)})
-		return render_template("admin/agregar_facul.html", vs = values, usuario=usuario)		
+		return render_template("admin/agregar_facul.html", vs = values, usuario=usuario)
 
 
 @admin.route('/admin/agregar_facul', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def agregar_facult_sig():
 
 	if request.method == 'POST':
@@ -743,7 +898,7 @@ def agregar_facult_sig():
 		lista_titulaciones = []
 		lista_cursos = []
 		facultad.nombre = request.form['nombre']
-		numero_titulaciones = int(request.form['titulaciones'])	
+		numero_titulaciones = int(request.form['titulaciones'])
 		for i in range(1,numero_titulaciones *2 + 1):
 			indice = str(i)
 			if i % 2 == 1:
@@ -756,8 +911,8 @@ def agregar_facult_sig():
 		facultad.cursos_x_titul = lista_cursos
 		with Mongo:
 			facul_id = Facultad.insert(facultad)
-			u = Usuario.find_one({Usuario._id: ObjectId(request.form['usuario'])})	
-			
+			u = Usuario.find_one({Usuario._id: ObjectId(request.form['usuario'])})
+
 
 		num = 0
 		ult = False
@@ -767,20 +922,22 @@ def agregar_facult_sig():
 		return render_template("admin/agregar_titul.html" ,  facultad = facultad, l_cursos = lista_cursos  , numero = num,  vs = values, ultima = ult, usuario = u)
 
 @admin.route('/admin/agregar_facul/titulaciones', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def agregar_titulacion():
 
 	#Encontrar la facultad asociada al nombre pasado por el form
 	facul_nombre = request.form['facultad']
 	with Mongo:
-		facultad = Facultad.find_one({Facultad.nombre : facul_nombre })	
-		u = Usuario.find_one({Usuario._id: ObjectId(request.form['usuario'])})	
-	
+		facultad = Facultad.find_one({Facultad.nombre : facul_nombre })
+		u = Usuario.find_one({Usuario._id: ObjectId(request.form['usuario'])})
+
 	#Inicializar parametros para el render_template
 
 	values = {0,1,2,3,4,5,6,7,8,9,10}
 	titul = facultad.num_titul
 	lista_cursos = facultad.cursos_x_titul
-	num = int(request.form['numero'])	
+	num = int(request.form['numero'])
 
 	#Creamos la titulacion con los datos aportados por el form
 	t = Titulacion()
@@ -793,11 +950,11 @@ def agregar_titulacion():
 	#Insertamos la titulacion creada anteriormente en Titulaciones
 	with Mongo:
 		titulacion_id = Titulacion.insert(t)
-		
+
 	for i in range(1,lista_cursos[num] + 1):
 		lista_asig = []
 		indice = str(i)
-		numero_asignaturas = int(request.form['asignaturas_'+ indice])	
+		numero_asignaturas = int(request.form['asignaturas_'+ indice])
 		for j in range(1 ,numero_asignaturas + 1):
 			n = str(j)
 			lista_asig.append(request.form['text'+n+indice])
@@ -820,7 +977,7 @@ def agregar_titulacion():
 			with Mongo:
 				Asignatura.insert(asignatura)
 
-		asign_titul.append(lista_asig)  
+		asign_titul.append(lista_asig)
 	#Adaptamos la titulacion con la lista de asignaturas enviadas a traves del form
 	with Mongo:
 		Titulacion.update({Titulacion._id: titulacion_id },{'$set': {Titulacion.asignaturas: asign_titul}})
@@ -844,24 +1001,28 @@ def agregar_titulacion():
 				titulacion = Titulacion.find_one({Titulacion.nombre:  titul })
 				numero_cursos.append(titulacion.num_cursos)
 				as_titul.append(titulacion.asignaturas)
-			
+
 		return render_template("admin/finalizar_registro_facultad.html" ,  facultad = facultad, asign_titul = as_titul , cursos = numero_cursos,  usuario = u)
 
 
 ###################################################################################################################
 #                                                                                                                 #
 #                          VIEWS MODIFICAR FACULTAD AGREGANDO UNA TITULACION                                                          #
-#                                                                                                                 # 
+#                                                                                                                 #
 ###################################################################################################################
 
 @admin.route('/admin/modificar_titulacion_inicio/<string:facultad>/<string:usuario>', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def modificar_titulacion_inicio(facultad, usuario):
 	with Mongo:
 		usuario = Usuario.find_one({Usuario._id : ObjectId(usuario)})
-	return render_template("admin/agregar_nueva_titulacion.html" , facultad = facultad, usuario= usuario)	
+	return render_template("admin/agregar_nueva_titulacion.html" , facultad = facultad, usuario= usuario)
 
 
 @admin.route('/admin/modificar_titulacion', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def modificar_titulacion():
 	values = {0,1,2,3,4,5,6,7,8,9,10}
 	if request.method == 'POST':
@@ -870,14 +1031,14 @@ def modificar_titulacion():
 		curso = int(request.form['cursos'])
 		facul_nombre = request.form['facultad']
 		with Mongo:
-			facultad = Facultad.find_one({Facultad.nombre : facul_nombre })	
+			facultad = Facultad.find_one({Facultad.nombre : facul_nombre })
 			numero = facultad.num_titul
 			numero += 1
 			titulaciones = facultad.titulaciones
 			for i in range(len(titulaciones)):
 				lista_titul.append(titulaciones[i])
 			lista_titul.append(request.form['nombre'])
-			cursos_x_titul = facultad.cursos_x_titul 
+			cursos_x_titul = facultad.cursos_x_titul
 			for i in range(len(cursos_x_titul)):
 				lista_cursos.append(cursos_x_titul[i])
 			lista_cursos.append(curso)
@@ -888,11 +1049,13 @@ def modificar_titulacion():
 		return render_template("admin/agregar_nueva_titulacion_fin.html" ,  facultad = facul_nombre, cursos = curso  ,  vs = values, nombre = request.form['nombre'])
 
 @admin.route('/admin/modificar_titulacion_fin', methods = ["GET","POST"])
+@login_required
+@required_roles('Admin')
 def modificar_titulacion_fin():
 	#Encontrar la facultad asociada al nombre pasado por el form
 	facul_nombre = request.form['facultad']
 	with Mongo:
-		facultad = Facultad.find_one({Facultad.nombre : facul_nombre })	
+		facultad = Facultad.find_one({Facultad.nombre : facul_nombre })
 
 	#Creamos la titulacion con los datos aportados por el form
 
@@ -906,13 +1069,13 @@ def modificar_titulacion_fin():
 	#Insertamos la titulacion creada anteriormente en Titulaciones
 	with Mongo:
 		titulacion_id = Titulacion.insert(t)
-		
+
 
 
 	for i in range(1,t.num_cursos + 1):
 		lista_asig = []
 		indice = str(i)
-		numero_asignaturas = int(request.form['asignaturas_'+ indice])	
+		numero_asignaturas = int(request.form['asignaturas_'+ indice])
 		for j in range(1 ,numero_asignaturas + 1):
 			n = str(j)
 			lista_asig.append(request.form['text'+n+indice])
@@ -935,19 +1098,19 @@ def modificar_titulacion_fin():
 			with Mongo:
 				Asignatura.insert(asignatura)
 
-		asign_titul.append(lista_asig)  
+		asign_titul.append(lista_asig)
 	#Adaptamos la titulacion con la lista de asignaturas enviadas a traves del form
 	with Mongo:
 		Titulacion.update({Titulacion.nombre: t.nombre },{'$set': {Titulacion.asignaturas: asign_titul}})
 
 	values = []
 	nombre = request.form['facultad']
-	with Mongo: 
+	with Mongo:
 		facultad = Facultad.find_one({Facultad.nombre: nombre })
 		id_facultad = facultad._id
 		titulaciones = Titulacion.find({Titulacion.id_facultad : id_facultad})
 		for titulacion in titulaciones:
-			values.append(titulacion.nombre)	
+			values.append(titulacion.nombre)
 
 	return render_template("admin/modificar_facultad.html", vs = values , facultad = nombre)
 
@@ -965,16 +1128,16 @@ def list():
 				ss+=", "
 				ss+= o["palabra"]
 				ss+= ", "
-				ss+= str(o["tamPalabra"]) 
+				ss+= str(o["tamPalabra"])
 				ss+= ", "
-				ss+= o["ellapsed"] 
+				ss+= o["ellapsed"]
 				ss+= ", "
-				ss+= str(o["DT"]) 
+				ss+= str(o["DT"])
 				ss+= ", "
-				ss+= str(o["FT"]) 
-				ss+= "\n"	
+				ss+= str(o["FT"])
+				ss+= "\n"
 			except Exception as e:
-				pass	
+				pass
 		output = make_response(ss)
 		output.headers["Content-Disposition"] = "attachment; filename=exportPlus.csv"
 		output.headers["Content-type"] = "text/csv"
