@@ -167,7 +167,7 @@ def comprobar_identidad():
 					cursos = Curso.find({Curso.id_titulacion:t._id})
 					user = User( str(usuario._id),values["nombre"],usuario.role)
 					login_user(user)
-					resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("fecha",-1).limit(3)
+					resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("_id",-1).limit(3)
 					return render_template("user/inicio.html", usuario = usuario, cursos = cursos , busqueda = False, resultados = resultados)
 				else:
 					return render_template("user/ident_fallida.html", motivo="Password")
@@ -187,7 +187,7 @@ def usuario_volver_inicio(nombre):
 		f = Facultad.find_one({Facultad.nombre : u.facultad})
 		t = Titulacion.find_one({Titulacion.nombre : u.titulacion},{Titulacion.id_facultad: f._id})
 		cursos = Curso.find({Curso.id_titulacion: t._id})
-		resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("formato",-1).limit(3)
+		resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("_id",-1).limit(3)
 
 	return render_template("user/inicio.html", usuario = u, cursos = cursos ,resultados= resultados)
 

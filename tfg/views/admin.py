@@ -236,16 +236,17 @@ def admin_enlaces_borrar():
 def admin_enlaces_agregar():
 	if request.method == 'POST':
 		nombre = request.form['nombre']
+		nombre_enlace = request.form['nombre_enlace']
 		url = request.form['url']
 		titulacion = request.form['enlace']
 		with Mongo:
 			u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
-			t = Titulacion.find_one({Titulacion.nombre : titulacion})
-		enlace = Enlaces()
-		enlace.nombre = nombre
-		enlace.enlace = url
-		enlace.id_titulacion = t._id
-		Enlaces.insert(enlace)
+			t = Titulacion.find_one({Titulacion._id : ObjectId(titulacion)})
+			enlace = Enlaces()
+			enlace.nombre = nombre_enlace
+			enlace.enlace = url
+			enlace.id_titulacion = t._id
+			Enlaces.insert(enlace)
 
 		return redirect(url_for('admin.admin_enlaces' , nombre = u._id))
 
@@ -294,7 +295,7 @@ def admin_bloquear():
 
 
 
-		return redirect(url_for('admin/admin_usuarios' ,nombre = u._id))
+		return redirect(url_for('admin.admin_usuarios' ,nombre = u._id))
 
 @admin.route('/admin/bloquear_usuario/facultad/_search')
 @login_required
@@ -360,7 +361,7 @@ def admin_desbloquear():
 			u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
 			Usuario.update({Usuario.nombre : usuario },{'$set': {Usuario.activo: True}})
 			Usuario.update({Usuario.nombre : usuario },{'$set': {Usuario.activo_desde: date }})
-		return redirect(url_for('admin/admin_usuarios', nombre = u._id))
+		return redirect(url_for('admin.admin_usuarios', nombre = u._id))
 
 
 @admin.route('/admin/pendientes/<string:nombre>', methods = ["GET"])
@@ -437,7 +438,7 @@ def admin_denuncias_cargar(usuario,den,tipo):
 			denuncia['fecha'] = m.fecha
 			denuncia['autor'] = m.autor
 			denuncia['titulo'] = m.asunto
-
+			denuncia['_id'] = m._id
 
 
 	return render_template("admin/denuncias.html", comentarios = comentarios, posts=posts, mensajes=mensajes, usuario=u, denuncias =True, denuncia=denuncia)
@@ -454,7 +455,7 @@ def admin_autorizar():
 			u = Usuario.find_one({Usuario._id : ObjectId(nombre)})
 			Archivo.update({Archivo.nombre : archivo },{'$set': {Archivo.autorizado: True}})
 
-		return redirect(url_for('admin/admin_pendientes' , nombre = u))
+		return redirect(url_for('admin.admin_pendientes' , nombre = u._id))
 
 @admin.route('/admin/archivos/<string:nombre>', methods = ["GET"])
 @login_required
@@ -641,7 +642,7 @@ def admin_borrar_titul(titulacion, usuario):
 			Asignatura.delete_many({Asignatura.id_curso : id_curso})
 			Curso.delete_one({Curso._id : id_curso})
 		Titulacion.delete_one({Titulacion._id : t._id})
-	return redirect(url_for('admin/admin_inicio' , nombre = usuario.nombre))
+	return redirect(url_for('admin.admin_inicio' , nombre = usuario.nombre))
 
 @admin.route('/admin/modificar_facul/<string:nombre>', methods = ["GET","POST"])
 @login_required
