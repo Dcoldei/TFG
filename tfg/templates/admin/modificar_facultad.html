@@ -18,8 +18,8 @@
 
 
 		<div class="wrapper">
-  			<h1>{{facultad}}</h1>
-  			<a href={{url_for('admin.admin_borrar', facultad=facultad, usuario=usuario._id) }}   class="button" > Borrar Facultad</a>
+  			<h1>{{facultad.nombre}}</h1>
+  			<a href={{url_for('admin.admin_borrar', facultad=facultad._id, usuario=usuario._id) }}   class="button" > Borrar Facultad</a>
   			<h1>TITULACIONES:  
   								</h1>
   			{% for titulacion in vs %}

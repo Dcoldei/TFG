@@ -170,7 +170,7 @@ def comprobar_identidad():
 					resultados = Archivo.find({Archivo.id_titulacion: t._id}).sort("_id",-1).limit(3)
 					return render_template("user/inicio.html", usuario = usuario, cursos = cursos , busqueda = False, resultados = resultados)
 				else:
-					return render_template("user/ident_fallida.html", motivo="Password")
+					return render_template("user/ident_fallida.html", motivo='Usuario bloqueado hasta el ' + usuario.activo_desde)
 
 ###################################################################################################################
 #                                                                                                                 #

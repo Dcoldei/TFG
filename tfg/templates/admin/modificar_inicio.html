@@ -23,9 +23,9 @@
     			<div>
     				<p><input type = "hidden" name = "nombre" value = "{{usuario._id}}" /></p>
     				<p>>Elige tu facultad
-    					<select name="facultad"  id="facul" style="width:120px" onchange='genList(this.value);'>
+    					<select name="facultad"  id="facul" style="width:120px" >
   							{% for facultad in vs %}
-  								<option value={{ facultad }}>{{ facultad }}</option>
+  								<option value={{ facultad._id }}>{{ facultad.nombre }}</option>
 							{% endfor %}					
 						</select>
 					</p>

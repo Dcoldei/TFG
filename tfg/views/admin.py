@@ -588,7 +588,7 @@ def admin_archivo_borrar():
 def admin_borrar(facultad,usuario):
 	with Mongo:
 		usuario = Usuario.find_one({Usuario._id: ObjectId(usuario)})
-		facultad = Facultad.find_one({Facultad.nombre : facultad})
+		facultad = Facultad.find_one({Facultad._id: ObjectId(facultad)})
 		Facultad.delete_one({Facultad.nombre : facultad.nombre})
 		cursor_facultad = Titulacion.find({Titulacion.id_facultad: facultad._id})
 		for t in cursor_facultad:
@@ -654,7 +654,7 @@ def admin_modificar(nombre):
 			u = Usuario.find_one({Usuario._id: ObjectId(nombre)})
 			facultades = Facultad.find().sort("nombre")
 			for facultad in facultades:
-				values.append(facultad.nombre)
+				values.append(facultad)
 		return render_template("admin/modificar_inicio.html", vs = values, usuario=u)
 
 
@@ -671,13 +671,13 @@ def admin_modificar_facultad():
 		nombre = request.form['facultad']
 		with Mongo:
 			u = Usuario.find_one({Usuario._id: ObjectId(usuario)})
-			facultad = Facultad.find_one({Facultad.nombre: nombre })
+			facultad = Facultad.find_one({Facultad._id: ObjectId(nombre) })
 			id_facultad = facultad._id
 			titulaciones = Titulacion.find({Titulacion.id_facultad : id_facultad}).sort("nombre")
 			#for titulacion in titulaciones:
 			#	values.append(titulacion.nombre)
 
-		return render_template("admin/modificar_facultad.html", vs = titulaciones , facultad = nombre, usuario= u)
+		return render_template("admin/modificar_facultad.html", vs = titulaciones , facultad = facultad, usuario= u)
 
 ###################################################################################################################
 #                                                                                                                 #
@@ -901,6 +901,7 @@ def agregar_facult_sig():
 		lista_titulaciones = []
 		lista_cursos = []
 		facultad.nombre = request.form['nombre']
+		print("facultad nombre",facultad.nombre)
 		numero_titulaciones = int(request.form['titulaciones'])
 		for i in range(1,numero_titulaciones *2 + 1):
 			indice = str(i)
@@ -921,7 +922,7 @@ def agregar_facult_sig():
 		ult = False
 		if numero_titulaciones == 1:
 			ult = True
-
+		print("primera", facultad)
 		return render_template("admin/agregar_titul.html" ,  facultad = facultad, l_cursos = lista_cursos  , numero = num,  vs = values, ultima = ult, usuario = u)
 
 @admin.route('/admin/agregar_facul/titulaciones', methods = ["GET","POST"])
@@ -931,12 +932,13 @@ def agregar_titulacion():
 
 	#Encontrar la facultad asociada al nombre pasado por el form
 	facul_nombre = request.form['facultad']
+	print("siguiente", facul_nombre)
 	with Mongo:
-		facultad = Facultad.find_one({Facultad.nombre : facul_nombre })
+		facultad = Facultad.find_one({Facultad._id : ObjectId(facul_nombre) })
 		u = Usuario.find_one({Usuario._id: ObjectId(request.form['usuario'])})
 
 	#Inicializar parametros para el render_template
-
+	print(facultad)
 	values = {0,1,2,3,4,5,6,7,8,9,10}
 	titul = facultad.num_titul
 	lista_cursos = facultad.cursos_x_titul

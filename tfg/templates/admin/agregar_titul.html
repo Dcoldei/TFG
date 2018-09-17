@@ -22,9 +22,8 @@
   			<p>Introduzca la información necesaria para la nueva titulación. Debe introducir el numero de cursos y las asignaturas de cada uno de ellos.</p>
   			<form class="form" method="post" enctype=multipart/form-data action="/admin/agregar_facul/titulaciones">
   				<p><input type = "hidden" name = "numero" value = {{numero}} /></p>
-				<p><input type = "hidden" name = "facultad" value = {{facultad.nombre}} /></p>
+				<p><input type = "hidden" name = "facultad" value = {{facultad._id}} /></p>
 				<p><input type = "hidden" name = "usuario" value = {{usuario._id}} /></p>
-
 				{% for curso in range(1, l_cursos[numero] + 1) %}
     			<div>
     				<p>>Nº Asignaturas del curso {{curso}}
